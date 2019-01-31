@@ -16,7 +16,7 @@ void lv_design_init_timer()
     {
       /* 에러 처리*/
       printf("Error\n");
-      return 0;
+      return ;
     }
 	old_time = cur_time;
 }

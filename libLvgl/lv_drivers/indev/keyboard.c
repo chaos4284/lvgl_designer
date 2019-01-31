@@ -54,7 +54,6 @@ bool keyboard_read(lv_indev_data_t * data)
 {
     data->state = state;
     data->key = keycode_to_ascii(last_key);
-
     return false;       /*No more data to read so return false*/
 }
 

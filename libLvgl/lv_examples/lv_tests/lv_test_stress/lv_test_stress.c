@@ -162,7 +162,7 @@ static void obj_mem_leak_tester(void * param)
             break;
         case 4:
             obj = lv_img_create(page, NULL);
-            lv_img_set_src(obj, &img_flower_icon);
+          //  lv_img_set_src(obj, &img_flower_icon);
             break;
         case 5:
             obj = lv_cb_create(page, NULL);

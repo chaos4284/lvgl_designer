@@ -128,12 +128,12 @@ LV_DISPLAY_SRC = $(wildcard $(LITTLEVGL_DRIVERS_DIR)/display/*.c)
 LV_INDEV_SRC   = $(wildcard $(LITTLEVGL_DRIVERS_DIR)/indev/*.c)
 
 #examples
-LV_TEST_GROUP_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_group/*.c)
-LV_TEST_MISC_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_misc/*.c)
-LV_TEST_OBJX_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_objx/*.c)
-LV_TEST_THEME_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_theme/*.c)
-LV_TEST_OBJ_SRC    = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_obj/*.c)
-LV_TEST_STRESS_SRC = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_stress/*.c)
+LV_TEST_GROUP_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_group/*.c)
+LV_TEST_MISC_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_misc/*.c)
+LV_TEST_OBJX_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_objx/*.c)
+LV_TEST_THEME_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_theme/*.c)
+LV_TEST_OBJ_SRC    = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_obj/*.c)
+LV_TEST_STRESS_SRC = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_stress/*.c)
 
 LV_TUTORIAL_PORTING_SRC       = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/0_porting/*.c)
 LV_TUTORIAL_HELLO_WORLD_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/1_hello_world/*.c)
@@ -209,8 +209,8 @@ CFLAGS += $(TIMER_HEADER)
 
 
 ########################################Main Source################################
-MAIN_SRC = main.c mouse_cursor_icon.c launcher.c button_management.c
-MAIN_OBJ = main.o mouse_cursor_icon.o launcher.o button_management.o
+MAIN_SRC = main.c mouse_cursor_icon.c launcher.c button_management.c lv_test.c device_management.c
+MAIN_OBJ = main.o mouse_cursor_icon.o launcher.o button_management.o lv_test.o device_management.o
 ########################################Main End################################
 
 C_OBJS          = $(C_SRCS:%.c=%.o)

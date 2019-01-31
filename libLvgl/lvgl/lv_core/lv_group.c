@@ -87,8 +87,11 @@ void lv_group_del(lv_group_t * group)
  */
 void lv_group_add_obj(lv_group_t * group, lv_obj_t * obj)
 {
-    if(group == NULL) return;
-
+    if(group == NULL)
+    {
+    	printf("qtwqtqwt\n");
+    	return;
+    }
     /*If the object is already in a group and focused then defocuse it*/
     if(obj->group_p) {
         if(lv_obj_is_focused(obj)) {

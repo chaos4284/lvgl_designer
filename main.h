@@ -14,7 +14,7 @@
 #include "lv_conf.h"
 #include "lvgl/lv_draw/lv_draw_img.h"
 #include <SDL2/SDL.h>
-#define SYS_TICK 5000
+#define SYS_TICK 2000
 /*********************
  *      DEFINES
  *********************/

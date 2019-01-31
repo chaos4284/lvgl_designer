@@ -74,25 +74,26 @@ static uint32_t last_key = 0;
  */
 void lv_tutorial_keyboard(lv_indev_t * kp_indev)
 {
-    /*Register the emulated keyboard*/
-    lv_indev_drv_t  kp_drv;
-    lv_indev_drv_init(&kp_drv);
-    kp_drv.type = LV_INDEV_TYPE_KEYPAD;
-    kp_drv.read = emulated_keypad_read;
-    emulated_kp_indev = lv_indev_drv_register(&kp_drv);
+	   /*Register the emulated keyboard*/
+	    lv_indev_drv_t  kp_drv;
+	    lv_indev_drv_init(&kp_drv);
+	    kp_drv.type = LV_INDEV_TYPE_KEYPAD;
+	    kp_drv.read = emulated_keypad_read;
+	    emulated_kp_indev = lv_indev_drv_register(&kp_drv);
+	    /*Create an object group*/
+	    g = lv_group_create();
+	    /*Assig the input device(s) to the created group*/
+	    lv_indev_set_group(emulated_kp_indev, g);
+	    if(kp_indev)
+	    {
+	    	lv_indev_set_group(kp_indev, g);
+	    }
 
-    /*Create an object group*/
-    g = lv_group_create();
+	    /*Create a demo GUI*/
+	    gui_create();
 
-    /*Assig the input device(s) to the created group*/
-    lv_indev_set_group(emulated_kp_indev, g);
-    if(kp_indev) lv_indev_set_group(kp_indev, g);
-
-    /*Create a demo GUI*/
-    gui_create();
-
-    /*Create virtual encoder*/
-    kaypad_create();
+	    /*Create virtual encoder*/
+	    kaypad_create();
 }
 
 /**********************
@@ -194,7 +195,11 @@ static void kaypad_create(void)
 
 static bool emulated_keypad_read(lv_indev_data_t * data)
 {
+	//printf("")
+	printf("data = %d\n",data->key);
     data->key = last_key;
+//    printf("key = %d\n",data->key);
+    //printf("data = %c\n",keycode_to_ascii(data->key));
     data->state = last_state;
     return false;
 }

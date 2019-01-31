@@ -2,7 +2,7 @@
  * @file lv_test_group.c
  *
  */
-
+#if 0
 /*********************
  *      INCLUDES
  *********************/
@@ -87,7 +87,6 @@ bool ta_chk(lv_obj_t * ta, uint32_t c)
  */
 void lv_test_group_1(void)
 {
-
     g = lv_group_create();
     lv_group_set_focus_cb(g, group_focus_cb);
 
@@ -383,5 +382,5 @@ static lv_res_t long_press_action(lv_obj_t * btn)
     return LV_RES_OK;
 }
 
-
+#endif
 #endif /* USE_LV_GROUP && USE_LV_TESTS */
