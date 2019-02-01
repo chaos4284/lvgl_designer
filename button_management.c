@@ -37,49 +37,31 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 {
 	lv_deisgn_button_info_t *temp_btn_list;
 
-	//temp_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 	if(component_btn_info.user_btn_list == NULL)
 	{
 		component_btn_info.user_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
-	//	temp_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		memcpy(component_btn_info.user_btn_list ,new_button,sizeof(lv_deisgn_button_info_t));
-	//	temp_btn_list->next = NULL;
-		printf("LINE = %d,component_btn_info = %d\n",__LINE__,component_btn_info.user_btn_list->pos_x);
 		component_btn_info.user_btn_list->next = NULL;
 
 	}
 	else
 	{
-		//component_btn_info.user_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		temp_btn_list = component_btn_info.user_btn_list;
-//		printf("temp_btn_list_x = %d\n",temp_btn_list->pos_x);
-//		printf("temp_btn_list_next = %d\n",temp_btn_list->next);
 		while(temp_btn_list->next != NULL)
 		{
-//			printf("temp_btn_list_x = %d\n",temp_btn_list->pos_x);
 			temp_btn_list = temp_btn_list->next;
 		}
 		temp_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		memcpy(temp_btn_list->next,new_button,sizeof(lv_deisgn_button_info_t));
-		//printf("posx = %d\n",component_btn_info.user_btn_list->next->pos_x);
 		temp_btn_list->next->next = NULL;
 
 	}
-	temp_btn_list = component_btn_info.user_btn_list;
-	for(int i = 0 ; i<component_btn_info.btn_count;i++ )
-	{
-		printf("temp_btn_list x = %d\n",temp_btn_list->pos_x);
-		temp_btn_list = temp_btn_list->next;
-	}
-
 }
 
 lv_obj_t* lv_design_get_button_by_id(unsigned int btn_id)
 {
 	lv_deisgn_button_info_t *temp_btn_list;
-	//temp_btn_list = component_btn_info.user_btn_list;
-
-	//printf("LINE = %d\n",__LINE__);
+    temp_btn_list = component_btn_info.user_btn_list;
 	while(temp_btn_list->next != NULL)
 	{
 		if(temp_btn_list->ref_button->free_num == btn_id)

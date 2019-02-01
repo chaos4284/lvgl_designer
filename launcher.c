@@ -40,8 +40,8 @@ static void lv_design_draw_screen()
 {
 	screen_panel.panel_width =  LV_VER_RES - (LV_VER_RES / 4);
 	screen_panel.panel_height = LV_HOR_RES/2;
-	printf("screen_panel.ref_panel_X = %d\n",screen_panel.panel_width);
-	printf("screen_panel.ref_panel_Y = %d\n",screen_panel.panel_height);
+//	printf("screen_panel.ref_panel_X = %d\n",screen_panel.panel_width);
+//	printf("screen_panel.ref_panel_Y = %d\n",screen_panel.panel_height);
 	screen_panel.ref_panel = lv_obj_create(background_panel,NULL);
 	screen_panel.pos_x = 0;
 	screen_panel.pos_y = 30;
@@ -63,7 +63,6 @@ static void lv_design_draw_property()
 }
 static void lv_design_draw_background()
 {
-    //static lv_obj_t * control_btn_label;               /*A label for the demo*/
     background_panel = lv_obj_create(lv_scr_act(), NULL);
     lv_obj_set_size(background_panel, LV_HOR_RES, LV_VER_RES);
     lv_obj_align(background_panel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
@@ -101,7 +100,7 @@ lv_res_t test_ta(lv_obj_t * ta, lv_signal_t sign, void * param)
 		else if(c == LV_GROUP_KEY_ENTER)
 		{
 			printf("Enter Press\n");
-			//lv_design_get_button_by_id();
+			
 			lv_obj_set_width(lv_design_get_button_by_id(current_btn_id), atoi(lv_ta_get_text(text_area)));
 		}
 		else
