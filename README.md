@@ -1,3 +1,3 @@
 # lvgl_designer
 This project implement littlevgl Designer.  
-This program required SDL2 and operate based on linux.  
+This program requires SDL2 and is based on Linux.
