@@ -44,7 +44,7 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 	//	temp_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		memcpy(component_btn_info.user_btn_list ,new_button,sizeof(lv_deisgn_button_info_t));
 	//	temp_btn_list->next = NULL;
-		printf("LINE = %d,component_btn_info = %d\n",__LINE__,component_btn_info.user_btn_list->pos_x);
+
 		component_btn_info.user_btn_list->next = NULL;
 
 	}
@@ -52,8 +52,6 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 	{
 		//component_btn_info.user_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		temp_btn_list = component_btn_info.user_btn_list;
-//		printf("temp_btn_list_x = %d\n",temp_btn_list->pos_x);
-//		printf("temp_btn_list_next = %d\n",temp_btn_list->next);
 		while(temp_btn_list->next != NULL)
 		{
 //			printf("temp_btn_list_x = %d\n",temp_btn_list->pos_x);
@@ -68,7 +66,6 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 	temp_btn_list = component_btn_info.user_btn_list;
 	for(int i = 0 ; i<component_btn_info.btn_count;i++ )
 	{
-		printf("temp_btn_list x = %d\n",temp_btn_list->pos_x);
 		temp_btn_list = temp_btn_list->next;
 	}
 
@@ -85,13 +82,10 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 		if(temp_btn_list->ref_button->free_num == btn_id)
 		{
 			ret_value = temp_btn_list;
-
-			printf("Function = %s, LINE= %d\n",__FUNCTION__,__LINE__);
 		}
 		else
 		{
 			ret_value = NULL;
-			printf("Function = %s, LINE= %d NULL\n",__FUNCTION__,__LINE__);
 		}
 
 	}
@@ -101,8 +95,6 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 		{
 			if(temp_btn_list->ref_button->free_num == btn_id)
 			{
-				printf("temp_btn_list->ref_button->free_num  = %d\n",temp_btn_list->ref_button->free_num );
-				printf("btn_id = %d\n",btn_id);
 				ret_value = temp_btn_list;
 				break;
 			}
@@ -113,7 +105,6 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 			ret_value = NULL;
 		}
 
-		printf("Function = %s, LINE= %d NULL\n",__FUNCTION__,__LINE__);
 	}
 
 

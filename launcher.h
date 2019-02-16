@@ -14,6 +14,7 @@ typedef struct lv_design_panel_info
  unsigned int panel_height;
  unsigned int pos_x;
  unsigned int pos_y;
+ unsigned int input_state;
  lv_obj_t* ref_panel;
 }lv_design_panel_info_t;
 
