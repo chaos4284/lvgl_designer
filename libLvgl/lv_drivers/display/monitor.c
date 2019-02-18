@@ -10,7 +10,7 @@
 #if USE_MONITOR
 
 #ifndef MONITOR_SDL_INCLUDE_PATH
-#define MONITOR_SDL_INCLUDE_PATH <SDL2/SDL.h>
+#  define MONITOR_SDL_INCLUDE_PATH <SDL2/SDL.h>
 #endif
 
 #include <stdlib.h>
@@ -32,9 +32,13 @@
 #endif
 
 #if defined(__APPLE__) && defined(TARGET_OS_MAC)
-# if __APPLE__ && TARGET_OS_MAC
+#  if __APPLE__ && TARGET_OS_MAC
 #define MONITOR_APPLE
-# endif
+#  endif
+#endif
+
+#if defined(__EMSCRIPTEN__)
+#  define MONITOR_EMSCRIPTEN
 #endif
 
 /**********************
@@ -58,6 +62,13 @@ static SDL_Window * window;
 static SDL_Renderer * renderer;
 static SDL_Texture * texture;
 static uint32_t tft_fb[MONITOR_HOR_RES * MONITOR_VER_RES];
+#if MONITOR_DOUBLE_BUFFERED
+#if LV_VDB_SIZE != (LV_HOR_RES * LV_VER_RES) || LV_VDB_DOUBLE == 0 || LV_COLOR_DEPTH != 32
+#error "MONITOR_DOUBLE_BUFFERED requires LV_VDB_SIZE = (LV_HOR_RES * LV_VER_RES) and  LV_VDB_DOUBLE = 1 and LV_COLOR_DEPTH = 32"
+#endif
+static uint32_t tft_fb2[MONITOR_HOR_RES * MONITOR_VER_RES];
+static uint32_t * tft_fb_act;
+#endif
 static volatile bool sdl_inited = false;
 static volatile bool sdl_refr_qry = false;
 static volatile bool sdl_quit_qry = false;
@@ -65,7 +76,11 @@ static volatile bool sdl_quit_qry = false;
 int quit_filter(void * userdata, SDL_Event * event);
 static void monitor_sdl_clean_up(void);
 static void monitor_sdl_init(void);
+#ifdef MONITOR_EMSCRIPTEN
+void monitor_sdl_refr_core(void); /* called from Emscripten loop */
+#else
 static void monitor_sdl_refr_core(void);
+#endif
 
 /**********************
  *      MACROS
@@ -81,12 +96,14 @@ static void monitor_sdl_refr_core(void);
 void monitor_init(void)
 {
     /*OSX needs to initialize SDL here*/
-#ifdef MONITOR_APPLE
+#if defined(MONITOR_APPLE) || defined(MONITOR_EMSCRIPTEN)
     monitor_sdl_init();
 #endif
 
+#ifndef MONITOR_EMSCRIPTEN
     SDL_CreateThread(monitor_sdl_refr_thread, "sdl_refr", NULL);
     while(sdl_inited == false); /*Wait until 'sdl_refr' initializes the SDL*/
+#endif
 }
 
 
@@ -105,6 +122,15 @@ void monitor_flush(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const lv_colo
         lv_flush_ready();
         return;
     }
+
+#if MONITOR_DOUBLE_BUFFERED
+    tft_fb_act = (uint32_t *)color_p;
+
+    sdl_refr_qry = true;
+
+    /*IMPORTANT! It must be called to tell the system the flush is ready*/
+    lv_flush_ready();
+#else
 
     int32_t y;
 #if LV_COLOR_DEPTH != 24 && LV_COLOR_DEPTH != 32    /*32 is valid but support 24 for backward compatibility too*/
@@ -129,6 +155,7 @@ void monitor_flush(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const lv_colo
 
     /*IMPORTANT! It must be called to tell the system the flush is ready*/
     lv_flush_ready();
+#endif
 }
 
 
@@ -221,7 +248,6 @@ static int monitor_sdl_refr_thread(void * param)
 #ifndef MONITOR_APPLE
     monitor_sdl_init();
 #endif
-
     /*Run until quit event not arrives*/
     while(sdl_quit_qry == false) {
         /*Refresh handling*/
@@ -264,7 +290,7 @@ static void monitor_sdl_init(void)
                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               MONITOR_HOR_RES * MONITOR_ZOOM, MONITOR_VER_RES * MONITOR_ZOOM, 0);       /*last param. SDL_WINDOW_BORDERLESS to hide borders*/
 
-#if MONITOR_VIRTUAL_MACHINE
+#if MONITOR_VIRTUAL_MACHINE || defined(MONITOR_EMSCRIPTEN)
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 #else
     renderer = SDL_CreateRenderer(window, -1, 0);
@@ -274,17 +300,33 @@ static void monitor_sdl_init(void)
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
     /*Initialize the frame buffer to gray (77 is an empirical value) */
-    memset(tft_fb, 77, MONITOR_HOR_RES * MONITOR_VER_RES * sizeof(uint32_t));
+    memset(tft_fb, 0x44, MONITOR_HOR_RES * MONITOR_VER_RES * sizeof(uint32_t));
+#if MONITOR_DOUBLE_BUFFERED
+    memset(tft_fb2, 0xbb, MONITOR_HOR_RES * MONITOR_VER_RES * sizeof(uint32_t));
+#if LV_VDB_ADR == LV_VDB_ADR_INV && LV_VDB2_ADR == LV_VDB_ADR_INV
+    lv_vdb_set_adr(tft_fb, tft_fb2);
+#endif
+    tft_fb_act = tft_fb;
+#endif
     SDL_UpdateTexture(texture, NULL, tft_fb, MONITOR_HOR_RES * sizeof(uint32_t));
     sdl_refr_qry = true;
     sdl_inited = true;
 }
 
+#ifdef MONITOR_EMSCRIPTEN
+void monitor_sdl_refr_core(void)
+#else
 static void monitor_sdl_refr_core(void)
+#endif
 {
     if(sdl_refr_qry != false) {
         sdl_refr_qry = false;
+
+#if MONITOR_DOUBLE_BUFFERED == 0
         SDL_UpdateTexture(texture, NULL, tft_fb, MONITOR_HOR_RES * sizeof(uint32_t));
+#else
+        SDL_UpdateTexture(texture, NULL, tft_fb_act, MONITOR_HOR_RES * sizeof(uint32_t));
+#endif
         SDL_RenderClear(renderer);
         /*Test: Draw a background to test transparent screens (LV_COLOR_SCREEN_TRANSP)*/
 //        SDL_SetRenderDrawColor(renderer, 0xff, 0, 0, 0xff);
@@ -296,7 +338,7 @@ static void monitor_sdl_refr_core(void)
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
     }
-#ifndef MONITOR_APPLE 
+#if !defined(MONITOR_APPLE) && !defined(MONITOR_EMSCRIPTEN)
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
 #if USE_MOUSE != 0
@@ -316,7 +358,11 @@ static void monitor_sdl_refr_core(void)
                 case SDL_WINDOWEVENT_TAKE_FOCUS:
 #endif
                 case SDL_WINDOWEVENT_EXPOSED:
+#if MONITOR_DOUBLE_BUFFERED == 0
                     SDL_UpdateTexture(texture, NULL, tft_fb, MONITOR_HOR_RES * sizeof(uint32_t));
+#else
+                    SDL_UpdateTexture(texture, NULL, tft_fb_act, MONITOR_HOR_RES * sizeof(uint32_t));
+#endif
                     SDL_RenderClear(renderer);
                     SDL_RenderCopy(renderer, texture, NULL, NULL);
                     SDL_RenderPresent(renderer);

@@ -80,7 +80,7 @@ void fbdev_init(void)
 
     // Map the device to memory
     fbp = (char *)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
-    if((int)fbp == -1) {
+    if((intptr_t)fbp == -1) {
         perror("Error: failed to map framebuffer device to memory");
         return;
     }
@@ -254,8 +254,6 @@ void fbdev_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, lv_color_t color
     /*1 bit per pixel*/
     else if(vinfo.bits_per_pixel == 1) {
         uint8_t * fbp8 = (uint8_t *)fbp;
-        int32_t x;
-        int32_t y;
         for(y = act_y1; y <= act_y2; y++) {
             for(x = act_x1; x <= act_x2; x++) {
                 location = (x + vinfo.xoffset) + (y + vinfo.yoffset) * vinfo.xres;
