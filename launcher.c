@@ -13,6 +13,7 @@ static lv_design_panel_info_t	component_panel;
 lv_group_t *group_input_keyboard;
 
 static unsigned char property_input_status;
+static lv_obj_t	*current_input_property;
 
 static lv_obj_t	*set_component_size_width;
 static lv_obj_t	*set_component_size_height;
@@ -37,7 +38,6 @@ unsigned int current_btn_id = 0;
 
 lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 {
-	volatile int a = 0;
 	lv_res_t res = 0;
 	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 	char data[100];
@@ -48,11 +48,12 @@ lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 	current_btn_id = btn->free_num;
 	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 	if(get_user_btn_content == NULL)
-	{		return 0;
+	{
+		return 0;
 	}
 	else
 	{
-		a= 20;
+		;
 	}
 
 	lv_obj_set_hidden(set_component_size_width,FALSE);
@@ -85,13 +86,19 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 	lv_indev_t * indev;
 	unsigned int button_component_pressed;
 	lv_deisgn_button_info_t button_info;
-	//button_info = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+	lv_deisgn_button_info_t *get_user_btn_content;
 	button_component_pressed = lv_design_get_button_component_press_state();
 	lv_design_button_list_t *get_user_btn_info;
 	if(button_component_pressed == 1)
 	{
 		property_input_status = FALSE;
-    	get_user_btn_info = lv_design_get_button_info();
+		if (current_input_property != NULL)
+		{
+			lv_group_remove_obj(current_input_property);
+			current_input_property = NULL;
+		}
+
+		get_user_btn_info = lv_design_get_button_info();
     	get_user_btn_info->btn_count++;
     	lv_design_set_button_component_press_state(FALSE);
     	lv_btn_set_state(lv_design_get_button_component_ref(),LV_BTN_STATE_REL);
@@ -119,11 +126,23 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
     }
 	else if(property_input_status == TRUE)
 	{
+		get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 		property_input_status = FALSE;
+		if (current_input_property != NULL)
+		{
+			lv_group_remove_obj(current_input_property);
+			current_input_property = NULL;
+		}
 		lv_obj_set_width(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
 		lv_obj_set_height(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
 		lv_obj_set_x(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
 		lv_obj_set_y(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
+		get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
+		get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_height));
+		get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
+		get_user_btn_content->pos_y = atoi(lv_ta_get_text(set_component_position_y));
+
+
     	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
@@ -136,6 +155,7 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_t sign, void * param)
 {
     lv_res_t res = 1;
+	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
     if(sign == LV_SIGNAL_PRESSED)
     {
@@ -144,48 +164,58 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
     	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-
-    	lv_ta_set_cursor_type(obj_property,LV_CURSOR_LINE);
     	lv_group_add_obj(group_input_keyboard, obj_property);
+    	current_input_property = obj_property;
+    	lv_ta_set_cursor_type(obj_property,LV_CURSOR_LINE);
+
     }
 	else if(sign == LV_SIGNAL_CONTROLL)
 	{
 		DEBUG_MSG
-		uint32_t c = *((uint32_t *)param);
-//		if(c == LV_GROUP_KEY_RIGHT)     lv_ta_cursor_right(obj_property);
-//		else if(c == LV_GROUP_KEY_LEFT) lv_ta_cursor_left(obj_property);
-//		else if(c == LV_GROUP_KEY_UP)   lv_ta_cursor_up(obj_property);
-		//else if(c == LV_GROUP_KEY_DOWN) lv_ta_cursor_down(obj_property);
-		if(c == LV_GROUP_KEY_DEL)  lv_ta_del_char(obj_property);
-		else if(c == LV_GROUP_KEY_DOWN)
+		uint32_t key = *((uint32_t *)param);
+		if((key == LV_GROUP_KEY_DEL) || (key == LV_GROUP_KEY_BACKSPACE))
+		{
+			lv_ta_del_char(obj_property);
+		}
+		else if(key == LV_GROUP_KEY_ENTER)
 		{
 				property_input_status = FALSE;
+				get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
+
 				if(obj_property == set_component_size_width)
 				{
 					lv_obj_set_width(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
+					get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
+
 				}
 				else if(obj_property == set_component_size_height)
 				{
 					lv_obj_set_height(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
+					get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_width));
+
 				}
 				else if(obj_property == set_component_position_x)
 				{
 					lv_obj_set_x(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
+					get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
+
 				}
 				else if(obj_property == set_component_position_y)
 				{
 					lv_obj_set_y(lv_design_get_button_by_id(current_btn_id)->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
+					get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_y));
+
 				}
 		    	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
 		    	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
 		    	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
 		    	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-
-
+		    	current_input_property = NULL;
+		    	lv_group_remove_obj(obj_property);
 		}
 		else
 		{
-			lv_ta_add_char(obj_property, c);
+			lv_ta_add_char(obj_property, key);
 		}
     }
 
@@ -228,6 +258,7 @@ static void lv_design_draw_property()
 	property_panel.pos_x = 0;
 	property_panel.pos_y = 30;
 	property_input_status = FALSE;
+	current_input_property = NULL;
 
 	lv_obj_set_size(property_panel.ref_panel,property_panel.panel_width,property_panel.panel_height);
 	lv_obj_align(property_panel.ref_panel, NULL, LV_ALIGN_IN_TOP_RIGHT, property_panel.pos_x, property_panel.pos_y);
