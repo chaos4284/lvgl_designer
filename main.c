@@ -65,8 +65,9 @@ int main(int argc, char ** argv)
          * It could be done in a timer interrupt or an OS task too.*/
                 diff = lv_design_get_time_diff();
                 if(diff > SYS_TICK)
-                {
-                        lv_tick_inc(10);
+                { 
+                        /*SYS_TICK is Micro Second*/
+                        lv_tick_inc(SYS_TICK/1000);
                         lv_task_handler();
                         lv_design_update_time();
                 }
