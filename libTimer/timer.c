@@ -13,17 +13,17 @@ void lv_design_init_timer()
 {
 
 	if (clock_gettime(CLOCK_MONOTONIC, &cur_time) == -1) 
-    {
+	{
 		/* 에러 처리*/
 		printf("Error\n");
 		return ;
-    }
+	}
 	old_time = cur_time;
 }
 
 void lv_design_update_time()
 {
-    old_time = cur_time;
+	old_time = cur_time;
 }
 
 uint64_t lv_design_get_time_diff()
