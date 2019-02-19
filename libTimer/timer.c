@@ -14,9 +14,9 @@ void lv_design_init_timer()
 
 	if (clock_gettime(CLOCK_MONOTONIC, &cur_time) == -1) 
     {
-      /* 에러 처리*/
-      printf("Error\n");
-      return ;
+		/* 에러 처리*/
+		printf("Error\n");
+		return ;
     }
 	old_time = cur_time;
 }
@@ -31,14 +31,11 @@ uint64_t lv_design_get_time_diff()
 	uint64_t time_interval = 0;
 	if (clock_gettime(CLOCK_MONOTONIC, &cur_time) == -1) 
 	{  
-    	/* 에러 처리*/
+    	/* Process Error*/
 		printf("Error\n");
    		return 0;
  	}
-/*	printf("cur_time_sec = %lu\n",cur_time.tv_sec);
-        printf("cur_time_nsec =%lu\n",cur_time.tv_nsec);
-        printf("old_time_sec = %lu\n",old_time.tv_sec);
-        printf("old_time_nsec = %lu\n",old_time.tv_nsec);*/
+
 	if(cur_time.tv_nsec >= old_time.tv_nsec)
  	{
 		result_time.tv_sec = cur_time.tv_sec - old_time.tv_sec;
