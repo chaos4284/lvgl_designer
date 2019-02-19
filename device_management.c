@@ -59,9 +59,8 @@ static void lv_design_set_keyboard()
 
 void lv_design_set_device()
 {
-	lv_design_set_monitor();
-	lv_design_set_mouse();
-	lv_design_set_keyboard();
-
+    lv_design_set_monitor();
+    lv_design_set_mouse();
+    lv_design_set_keyboard();
 }
 
