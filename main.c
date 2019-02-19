@@ -60,20 +60,20 @@ int main(int argc, char ** argv)
 //    lv_tutorial_keyboard(key_test);
 
     lv_design_launch_module();
-    while(1) {
+    while(1) 
+    {
         /* Periodically call the lv_task handler.
          * It could be done in a timer interrupt or an OS task too.*/
-                diff = lv_design_get_time_diff();
-                if(diff > SYS_TICK)
-                { 
-                        
-                        lv_tick_inc(SYS_TICK/1000); /*SYS_TICK(2000) / 1000 = 2ms
-                        lv_task_handler();
-                        lv_design_update_time();
-                }
-                else
-                {
-                }
+        diff = lv_design_get_time_diff();
+        if(diff > SYS_TICK)
+        {         
+                lv_tick_inc(SYS_TICK/1000); /*SYS_TICK(2000) / 1000 = 2ms
+                lv_task_handler();
+                lv_design_update_time();
+        }
+        else
+        {
+        }
     }
 
 
