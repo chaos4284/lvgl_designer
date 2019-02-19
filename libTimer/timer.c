@@ -23,7 +23,7 @@ void lv_design_init_timer()
 
 void lv_design_update_time()
 {
-	old_time = cur_time;
+    old_time = cur_time;
 }
 
 uint64_t lv_design_get_time_diff()
