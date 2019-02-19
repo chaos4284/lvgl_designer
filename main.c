@@ -66,8 +66,8 @@ int main(int argc, char ** argv)
                 diff = lv_design_get_time_diff();
                 if(diff > SYS_TICK)
                 { 
-                        /*SYS_TICK is Micro Second*/
-                        lv_tick_inc(SYS_TICK/1000);
+                        
+                        lv_tick_inc(SYS_TICK/1000); /*SYS_TICK(2000) / 1000 = 2ms
                         lv_task_handler();
                         lv_design_update_time();
                 }
