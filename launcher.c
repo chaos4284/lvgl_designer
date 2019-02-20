@@ -190,7 +190,7 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		lv_design_hidden_property(TRUE);
 	}
 
-    return res;
+    	return res;
 }
 
 lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_t sign, void * param)
@@ -213,55 +213,55 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 		DEBUG_MSG
 
     }
-else if(sign == LV_SIGNAL_CONTROLL)
-{
-	uint32_t key = *((uint32_t *)param);
-	if((key == LV_GROUP_KEY_DEL) || (key == LV_GROUP_KEY_BACKSPACE))
+	else if(sign == LV_SIGNAL_CONTROLL)
 	{
-		lv_ta_del_char(obj_property);
-	}
-	else if(key == LV_GROUP_KEY_ENTER)
-	{
-		property_input_status = FALSE;
-		get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
-		if(obj_property == set_component_name)
+		uint32_t key = *((uint32_t *)param);
+		if((key == LV_GROUP_KEY_DEL) || (key == LV_GROUP_KEY_BACKSPACE))
 		{
-			strcpy(text_data,lv_ta_get_text(set_component_name));
-//			lv_label_set_text(get_user_btn_content->ref_label, lv_ta_get_text(set_component_name));
-			lv_label_set_text(get_user_btn_content->ref_label, text_data);
+			lv_ta_del_char(obj_property);
 		}
-		else if(obj_property == set_component_size_width)
+		else if(key == LV_GROUP_KEY_ENTER)
 		{
-			lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
-			get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
+			property_input_status = FALSE;
+			get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
+			if(obj_property == set_component_name)
+			{
+				strcpy(text_data,lv_ta_get_text(set_component_name));
+	//			lv_label_set_text(get_user_btn_content->ref_label, lv_ta_get_text(set_component_name));
+				lv_label_set_text(get_user_btn_content->ref_label, text_data);
+			}
+			else if(obj_property == set_component_size_width)
+			{
+				lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
+				get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
+			}
+			else if(obj_property == set_component_size_height)
+			{
+				lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
+				get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_width));
+			}
+			else if(obj_property == set_component_position_x)
+			{
+				lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
+				get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
+			}
+			else if(obj_property == set_component_position_y)
+			{
+				lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
+				get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_y));
+			}
+		    lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
+		    lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
+		    lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
+		    lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
+		    lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
+		    current_input_property = NULL;
+		    lv_group_remove_obj(obj_property);
 		}
-		else if(obj_property == set_component_size_height)
+		else
 		{
-			lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
-			get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_width));
+			lv_ta_add_char(obj_property, key);
 		}
-		else if(obj_property == set_component_position_x)
-		{
-			lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
-			get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
-		}
-		else if(obj_property == set_component_position_y)
-		{
-			lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
-			get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_y));
-		}
-	    	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
-	    	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
-	    	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
-	    	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
-	    	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-	    	current_input_property = NULL;
-	    	lv_group_remove_obj(obj_property);
-	}
-	else
-	{
-		lv_ta_add_char(obj_property, key);
-	}
     }
     return res;
 }
