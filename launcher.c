@@ -155,7 +155,7 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		lv_label_set_text(button_info.ref_label, "Button");
 		lv_design_insert_user_button(&button_info);
 
-    }
+	}
 	else if(property_input_status == TRUE)
 	{
 		DEBUG_MSG
@@ -178,12 +178,12 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
 		get_user_btn_content->pos_y = atoi(lv_ta_get_text(set_component_position_y));
 
-    	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
-    	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
-    	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
-    	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
-    	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-    	lv_design_hidden_property(TRUE);
+		lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
+		lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
+		lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
+		lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
+		lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
+		lv_design_hidden_property(TRUE);
 	}
 	else if(lv_obj_get_hidden(set_component_name) == FALSE)
 	{
@@ -197,7 +197,7 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 {
     lv_res_t res = 1;
     char text_data[100];
-	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+    lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
     if(sign == LV_SIGNAL_PRESSED)
     {
@@ -213,66 +213,57 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 		DEBUG_MSG
 
     }
-	else if(sign == LV_SIGNAL_CONTROLL)
+else if(sign == LV_SIGNAL_CONTROLL)
+{
+	uint32_t key = *((uint32_t *)param);
+	if((key == LV_GROUP_KEY_DEL) || (key == LV_GROUP_KEY_BACKSPACE))
 	{
-		uint32_t key = *((uint32_t *)param);
-		if((key == LV_GROUP_KEY_DEL) || (key == LV_GROUP_KEY_BACKSPACE))
+		lv_ta_del_char(obj_property);
+	}
+	else if(key == LV_GROUP_KEY_ENTER)
+	{
+		property_input_status = FALSE;
+		get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
+		if(obj_property == set_component_name)
 		{
-			lv_ta_del_char(obj_property);
+			strcpy(text_data,lv_ta_get_text(set_component_name));
+//			lv_label_set_text(get_user_btn_content->ref_label, lv_ta_get_text(set_component_name));
+			lv_label_set_text(get_user_btn_content->ref_label, text_data);
 		}
-		else if(key == LV_GROUP_KEY_ENTER)
+		else if(obj_property == set_component_size_width)
 		{
-			property_input_status = FALSE;
-			get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
-
-			if(obj_property == set_component_name)
-			{
-				strcpy(text_data,lv_ta_get_text(set_component_name));
-//				lv_label_set_text(get_user_btn_content->ref_label, lv_ta_get_text(set_component_name));
-				lv_label_set_text(get_user_btn_content->ref_label, text_data);
-			}
-			else if(obj_property == set_component_size_width)
-			{
-				lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
-				get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
-
-			}
-			else if(obj_property == set_component_size_height)
-			{
-				lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
-				get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_width));
-
-			}
-			else if(obj_property == set_component_position_x)
-			{
-				lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
-				get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
-
-			}
-			else if(obj_property == set_component_position_y)
-			{
-				lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
-				get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_y));
-
-			}
-
-		    	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
-		    	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
-		    	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
-		    	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
-		    	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-		    	current_input_property = NULL;
-		    	lv_group_remove_obj(obj_property);
+			lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
+			get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
 		}
-		else
+		else if(obj_property == set_component_size_height)
 		{
-			lv_ta_add_char(obj_property, key);
+			lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
+			get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_width));
 		}
+		else if(obj_property == set_component_position_x)
+		{
+			lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
+			get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
+		}
+		else if(obj_property == set_component_position_y)
+		{
+			lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
+			get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_y));
+		}
+	    	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
+	    	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
+	    	lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
+	    	lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
+	    	lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
+	    	current_input_property = NULL;
+	    	lv_group_remove_obj(obj_property);
+	}
+	else
+	{
+		lv_ta_add_char(obj_property, key);
+	}
     }
-
-
     return res;
-
 }
 
 static void lv_design_draw_component()
