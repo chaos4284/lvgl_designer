@@ -10,6 +10,8 @@
 #include "launcher.h"
 #include "button_management.h"
 
+extern	void lv_design_set_screen_panel_press_state(unsigned char screen_panel_press_state);
+extern	void lv_design_set_current_selected_component(unsigned char selected_component);
 static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn);
 static lv_design_button_list_t component_btn_info;
 
@@ -121,9 +123,9 @@ unsigned int lv_design_get_button_component_press_state()
 	return component_btn_info.main_button_pressed;
 }
 
-void lv_design_set_button_component_press_state(unsigned int button_state)
+void lv_design_set_button_component_press_state(unsigned int btn_press_state)
 {
-	component_btn_info.main_button_pressed = button_state;
+	component_btn_info.main_button_pressed = btn_press_state;
 }
 
 lv_obj_t* lv_design_get_button_component_ref()
@@ -135,11 +137,20 @@ static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn)
 {
 	if(component_btn_info.main_button_pressed  == FALSE)
 	{
+		DEBUG_MSG
+		printf("Action True\n");
+
 		component_btn_info.main_button_pressed = TRUE;
+		lv_design_set_screen_panel_press_state(TRUE);
+		lv_design_set_current_selected_component(SELECTED_BUTTON);
 	}
 	else
 	{
+		DEBUG_MSG
+		printf("Action False\n");
+
 		component_btn_info.main_button_pressed = FALSE;
+		lv_design_set_screen_panel_press_state(FALSE);
 	}
     return LV_RES_OK;
 }

@@ -36,7 +36,7 @@
 /**********************
  *      TYPEDEFS
  **********************/
-
+#if 0
 /**********************
  *  STATIC PROTOTYPES
  **********************/
@@ -240,6 +240,6 @@ static lv_res_t long_press_action(lv_obj_t * btn)
 #endif
     return LV_RES_OK;
 }
-
+#endif
 
 #endif /* USE_LV_GROUP && USE_LV_TESTS */

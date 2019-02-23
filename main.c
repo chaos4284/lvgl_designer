@@ -58,8 +58,9 @@ int main(int argc, char ** argv)
     lv_design_init_timer();
    // key_test = lv_design_get_keyboard_device_ref();
 //    lv_tutorial_keyboard(key_test);
-
+   // lv_test_group_1();
     lv_design_launch_module();
+
     while(1) 
     {
         /* Periodically call the lv_task handler.

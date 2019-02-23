@@ -2,7 +2,7 @@
  * @file lv_test_group.c
  *
  */
-#if 0
+#if 1
 /*********************
  *      INCLUDES
  *********************/
@@ -166,13 +166,16 @@ void lv_test_group_1(void)
     lv_group_add_obj(g, obj);
 
     obj = lv_btn_create(win, NULL);
-    lv_group_add_obj(g, obj);
+    lv_obj_set_pos(obj, 100,700);
+  lv_group_add_obj(g, obj);
     lv_btn_set_toggle(obj, true);
     lv_btn_set_action(obj, LV_BTN_ACTION_CLICK, click_action);
     lv_btn_set_action(obj, LV_BTN_ACTION_PR, press_action);
     lv_btn_set_action(obj, LV_BTN_ACTION_LONG_PR, long_press_action);
-    obj = lv_label_create(obj, NULL);
-    lv_label_set_text(obj, "Button");
+
+ obj = lv_label_create(obj, NULL);
+  lv_label_set_text(obj, "a");
+
 
     obj = lv_cb_create(win, NULL);
     lv_cb_set_action(obj, select_action);
@@ -213,7 +216,7 @@ void lv_test_group_1(void)
     lv_obj_set_size(obj, LV_HOR_RES - LV_DPI, LV_VER_RES / 2);
     lv_kb_set_ta(obj, ta);
     lv_group_add_obj(g, obj);
-
+    /*
     static const char * mbox_btns[] = {"Yes", "No", ""};
     obj = lv_mbox_create(win, NULL);
     lv_mbox_add_btns(obj, mbox_btns, NULL);
@@ -251,7 +254,7 @@ void lv_test_group_1(void)
     lv_gauge_set_needle_count(obj, 1, needle_color);
     lv_gauge_set_value(obj, 0, 80);
     lv_group_add_obj(g, obj);
-
+    /*
     obj = lv_chart_create(win, NULL);
     lv_chart_series_t * ser = lv_chart_add_series(obj, LV_COLOR_RED);
     lv_chart_set_next(obj, ser, 40);
@@ -271,7 +274,7 @@ void lv_test_group_1(void)
     lv_tabview_add_tab(obj, "Tab 1");
     lv_tabview_add_tab(obj, "Tab 2");
     lv_group_add_obj(g, obj);
-
+*/
     lv_group_focus_obj(lv_group_get_focused(g));
 }
 

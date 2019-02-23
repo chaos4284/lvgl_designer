@@ -18,6 +18,12 @@ typedef struct lv_design_panel_info
  lv_obj_t* ref_panel;
 }lv_design_panel_info_t;
 
+enum select_component{
+	SELECTED_INIT,
+	SELECTED_BUTTON,
+	SELECTED_LABEL,
+	SELECTED_CHECKBOX,
+};
 
 extern void lv_design_init_button_component();
 extern unsigned int lv_design_get_button_component_press_state();
