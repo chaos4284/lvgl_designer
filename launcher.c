@@ -96,8 +96,8 @@ lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 	{
 		;
 	}
-	DEBUG_MSG
-	printf("Action True\n");
+	
+
 	lv_design_set_screen_panel_press_state(TRUE);
 	lv_design_hidden_property(FALSE);
 
@@ -161,7 +161,7 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 
 	if(property_input_status == TRUE)
 	{
-		DEBUG_MSG
+		
 		get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 		property_input_status = FALSE;
 
@@ -216,11 +216,8 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
     lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
     if(sign == LV_SIGNAL_PRESSED)
-    {
-    	DEBUG_MSG
-		printf("Action True\n");
-
-    	property_input_status = TRUE;
+    {   	
+	property_input_status = TRUE;
     	lv_design_set_screen_panel_press_state(TRUE);
     	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
@@ -326,8 +323,6 @@ static void lv_design_draw_screen()
 	lv_page_set_sb_mode(screen_container_page, LV_SB_MODE_AUTO);
 	lv_page_set_style(screen_container_page, LV_PAGE_STYLE_SB, &style_sb);
 	lv_design_set_screen_panel_press_state(FALSE);
-	DEBUG_MSG
-	printf("Action False\n");
 
 	lv_obj_set_size(screen_panel.ref_panel, screen_panel.panel_width, screen_panel.panel_height);
 	lv_obj_align(screen_panel.ref_panel, NULL, LV_ALIGN_IN_TOP_MID, screen_panel.pos_x, screen_panel.pos_y);
@@ -459,6 +454,4 @@ void lv_design_launch_module()
 	lv_design_draw_screen();
 	lv_design_draw_component();
 	lv_design_draw_property();
-
-//	DEBUG_MSG
 }
