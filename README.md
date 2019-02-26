@@ -11,7 +11,7 @@ sudo apt-get install libsdl2-dev
 git clone https://github.com/chaos4284/lvgl_designer.git
 
 # 3. Compile
-cd lvgl_designer
+cd lvgl_designer  
 make
 
 # 4. running
