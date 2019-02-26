@@ -56,12 +56,10 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 		temp_btn_list = component_btn_info.user_btn_list;
 		while(temp_btn_list->next != NULL)
 		{
-//			printf("temp_btn_list_x = %d\n",temp_btn_list->pos_x);
 			temp_btn_list = temp_btn_list->next;
 		}
 		temp_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		memcpy(temp_btn_list->next,new_button,sizeof(lv_deisgn_button_info_t));
-		//printf("posx = %d\n",component_btn_info.user_btn_list->next->pos_x);
 		temp_btn_list->next->next = NULL;
 
 	}
@@ -137,18 +135,12 @@ static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn)
 {
 	if(component_btn_info.main_button_pressed  == FALSE)
 	{
-		DEBUG_MSG
-		printf("Action True\n");
-
 		component_btn_info.main_button_pressed = TRUE;
 		lv_design_set_screen_panel_press_state(TRUE);
 		lv_design_set_current_selected_component(SELECTED_BUTTON);
 	}
 	else
 	{
-		DEBUG_MSG
-		printf("Action False\n");
-
 		component_btn_info.main_button_pressed = FALSE;
 		lv_design_set_screen_panel_press_state(FALSE);
 	}
