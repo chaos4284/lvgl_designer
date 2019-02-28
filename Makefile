@@ -44,12 +44,12 @@ LV_DISPLAY_INC =  $(LITTLEVGL_DRIVERS_DIR)/display
 LV_INDEV_INC   =  $(LITTLEVGL_DRIVERS_DIR)/indev
 
 #examples
-#LV_TEST_GROUP_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_group
-#LV_TEST_MISC_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_misc
-#LV_TEST_OBJX_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_objx
-#LV_TEST_THEME_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_theme
-#LV_TEST_OBJ_INC    =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_obj
-#LV_TEST_STRESS_INC =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_stress
+LV_TEST_GROUP_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_group
+LV_TEST_MISC_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_misc
+LV_TEST_OBJX_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_objx
+LV_TEST_THEME_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_theme
+LV_TEST_OBJ_INC    =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_obj
+LV_TEST_STRESS_INC =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_stress
 
 #LV_TUTORIAL_PORTING_INC       =  $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/0_porting
 #LV_TUTORIAL_HELLO_WORLD_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/1_hello_world
@@ -84,7 +84,7 @@ LITTLEVGL_HEADER += -I$(LV_DISPLAY_INC)
 LITTLEVGL_HEADER += -I$(LV_INDEV_INC)
 
 #source test
-#LITTLEVGL_HEADER += -I$(LV_TEST_GROUP_INC)
+LITTLEVGL_HEADER += -I$(LV_TEST_GROUP_INC)
 #LITTLEVGL_HEADER += -I$(LV_TEST_MISC_INC)
 #LITTLEVGL_HEADER += -I$(LV_TEST_OBJX_INC)
 #LITTLEVGL_HEADER += -I$(LV_TEST_THEME_INC)
@@ -128,7 +128,7 @@ LV_DISPLAY_SRC = $(wildcard $(LITTLEVGL_DRIVERS_DIR)/display/*.c)
 LV_INDEV_SRC   = $(wildcard $(LITTLEVGL_DRIVERS_DIR)/indev/*.c)
 
 #examples
-#LV_TEST_GROUP_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_group/*.c)
+LV_TEST_GROUP_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_group/*.c)
 #LV_TEST_MISC_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_misc/*.c)
 #LV_TEST_OBJX_SRC   = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_objx/*.c)
 #LV_TEST_THEME_SRC  = $(wildcard $(LITTLEVGL_EXAMPLE_DIR)/lv_tests/lv_test_theme/*.c)
@@ -167,7 +167,7 @@ LITTLEVGL_SOURCE += $(LV_DISPLAY_SRC)
 LITTLEVGL_SOURCE += $(LV_INDEV_SRC)
 
 #source test
-#LITTLEVGL_SOURCE += $(LV_TEST_GROUP_SRC)
+LITTLEVGL_SOURCE += $(LV_TEST_GROUP_SRC)
 #LITTLEVGL_SOURCE += $(LV_TEST_MISC_SRC)
 #LITTLEVGL_SOURCE += $(LV_TEST_OBJX_SRC)
 #LITTLEVGL_SOURCE += $(LV_TEST_THEME_SRC)

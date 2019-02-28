@@ -217,7 +217,7 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 
     if(sign == LV_SIGNAL_PRESSED)
     {   	
-	property_input_status = TRUE;
+    	property_input_status = TRUE;
     	lv_design_set_screen_panel_press_state(TRUE);
     	lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
     	lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
@@ -274,9 +274,24 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 		    current_input_property = NULL;
 		    lv_group_remove_obj(obj_property);
 		}
+		else if((key >= 0 ) && (key <= 127))
+		{
+			if(keyboard_get_pressed_shift() == TRUE)
+			{
+				if((key >= 0x41) && (key <= 0x5A))
+				{
+					key += 0x20;
+				}
+				else if((key >= 0x61) && (key <= 0x7A))
+				{
+					key -= 0x20;
+				}
+			}
+			lv_ta_add_char(obj_property, key);
+		}
 		else
 		{
-			lv_ta_add_char(obj_property, key);
+
 		}
     }
     return res;

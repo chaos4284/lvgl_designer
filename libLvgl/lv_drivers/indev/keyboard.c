@@ -28,7 +28,8 @@ static uint32_t keycode_to_ascii(uint32_t sdl_key);
  **********************/
 static uint32_t last_key;
 static lv_indev_state_t state;
-
+static bool shift_key_pressed = 0;
+static int key_input_count = 0;
 /**********************
  *      MACROS
  **********************/
@@ -50,6 +51,10 @@ void keyboard_init(void)
  * @param data store the read data here
  * @return false: because the points are not buffered, so no more data to be read
  */
+bool keyboard_get_pressed_shift()
+{
+	return shift_key_pressed;
+}
 bool keyboard_read(lv_indev_data_t * data)
 {
     data->state = state;
@@ -71,9 +76,21 @@ void keyboard_handler(SDL_Event * event)
         case SDL_KEYDOWN:                       /*Button press*/
             last_key = event->key.keysym.sym;   /*Save the pressed key*/
             state = LV_INDEV_STATE_PR;          /*Save the key is pressed now*/
+
+            if((last_key == 1073742049) || (last_key == 1073742053))
+              {
+            	shift_key_pressed = true;
+              }
             break;
         case SDL_KEYUP:                         /*Button release*/
+            last_key = event->key.keysym.sym;   /*Save the pressed key*/
             state = LV_INDEV_STATE_REL;         /*Save the key is released but keep the last key*/
+
+            if((last_key == 1073742049) || (last_key == 1073742053))
+              {
+            	shift_key_pressed = false;
+              }
+
             break;
         default:
             break;
