@@ -38,6 +38,7 @@ void lv_design_set_screen_panel_press_state(unsigned char screen_panel_press_sta
 
 unsigned int current_btn_id = 0;
 unsigned int current_selected_component = 0;
+lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn);
 void lv_design_hidden_property(bool hidden_flag)
 {
 	if(hidden_flag == FALSE)
@@ -73,19 +74,50 @@ void lv_design_hidden_property(bool hidden_flag)
 		;
 	}
 }
+
+lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_signal_t sign, void * param)
+{
+	lv_res_t res = 0;
+	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+	current_btn_id = btn->free_num;
+	printf("current_btn_id = %d\n",current_btn_id);
+	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
+	if(sign == LV_SIGNAL_PRESSED)
+	{
+		lv_design_user_button_press_callback(get_user_btn_content->ref_button);
+		printf("press\n");
+	}
+	else if(sign == LV_SIGNAL_DRAG_END)
+	{
+		get_user_btn_content->pos_x =lv_obj_get_x(get_user_btn_content->ref_button);
+		get_user_btn_content->pos_y =lv_obj_get_y(get_user_btn_content->ref_button);
+
+		lv_obj_set_pos(get_user_btn_content->ref_button, get_user_btn_content->pos_x, get_user_btn_content->pos_y);
+	}
+
+	return res;
+}
+
 void lv_design_set_current_selected_component(unsigned char selected_component)
 {
 	current_selected_component = selected_component;
 }
+lv_res_t lv_design_user_button_press_long_press_callback(lv_obj_t* btn)
+{
+	lv_res_t res = 0;
+	printf("long press state = %d\n",btn->click);
+	return res;
+}
+
 
 lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 {
 	lv_res_t res = 0;
+
 	char data[100];
 	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
 	current_btn_id = btn->free_num;
-
 	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 
 	if(get_user_btn_content == NULL)
@@ -96,7 +128,6 @@ lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 	{
 		;
 	}
-	
 
 	lv_design_set_screen_panel_press_state(TRUE);
 	lv_design_hidden_property(FALSE);
@@ -115,7 +146,7 @@ lv_res_t lv_design_user_button_press_callback(lv_obj_t* btn)
 	return res;
 }
 
-
+/* It management Draw Screen Area where components are placed*/
 lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void * param)
 {
 	lv_res_t res = 0;
@@ -151,17 +182,21 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		button_info.ref_button = lv_btn_create(screen_panel.ref_panel, NULL);
 		button_info.ref_label = lv_label_create(button_info.ref_button, NULL);
 		button_info.ref_button->free_num = get_user_btn_info->btn_count;
-		lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
 
+		lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
 		lv_obj_set_pos(button_info.ref_button, button_info.pos_x, button_info.pos_y);
-		lv_btn_set_action(button_info.ref_button, LV_BTN_ACTION_PR, lv_design_user_button_press_callback);
-		lv_label_set_text(button_info.ref_label, "Button");
+		lv_obj_set_drag(button_info.ref_button, true);
+
+//		lv_btn_set_action(button_info.ref_button, LV_BTN_ACTION_PR, lv_design_user_button_press_callback);
+//		lv_btn_set_action(button_info.ref_button, LV_BTN_ACTION_LONG_PR, lv_design_user_button_press_long_press_callback);
 		lv_design_insert_user_button(&button_info);
+		lv_obj_set_signal_func(button_info.ref_button, lv_design_manage_position_of_user_button_callback);
+		lv_label_set_text(button_info.ref_label, "Button");
+
 	}
 
 	if(property_input_status == TRUE)
 	{
-		
 		get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 		property_input_status = FALSE;
 
@@ -243,7 +278,6 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 			if(obj_property == set_component_name)
 			{
 				strcpy(text_data,lv_ta_get_text(set_component_name));
-	//			lv_label_set_text(get_user_btn_content->ref_label, lv_ta_get_text(set_component_name));
 				lv_label_set_text(get_user_btn_content->ref_label, text_data);
 			}
 			else if(obj_property == set_component_size_width)

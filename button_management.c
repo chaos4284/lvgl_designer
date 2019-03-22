@@ -39,20 +39,20 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 {
 	lv_deisgn_button_info_t *temp_btn_list;
 
-	//temp_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+
 	if(component_btn_info.user_btn_list == NULL)
 	{
 		component_btn_info.user_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
-	//	temp_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+
 		memcpy(component_btn_info.user_btn_list ,new_button,sizeof(lv_deisgn_button_info_t));
-	//	temp_btn_list->next = NULL;
+
 
 		component_btn_info.user_btn_list->next = NULL;
 
 	}
 	else
 	{
-		//component_btn_info.user_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+
 		temp_btn_list = component_btn_info.user_btn_list;
 		while(temp_btn_list->next != NULL)
 		{
@@ -133,6 +133,7 @@ lv_obj_t* lv_design_get_button_component_ref()
 
 static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn)
 {
+
 	if(component_btn_info.main_button_pressed  == FALSE)
 	{
 		component_btn_info.main_button_pressed = TRUE;
