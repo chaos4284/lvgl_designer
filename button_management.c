@@ -137,13 +137,11 @@ static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn)
 	if(component_btn_info.main_button_pressed  == FALSE)
 	{
 		component_btn_info.main_button_pressed = TRUE;
-		lv_design_set_screen_panel_press_state(TRUE);
 		lv_design_set_current_selected_component(SELECTED_BUTTON);
 	}
 	else
 	{
 		component_btn_info.main_button_pressed = FALSE;
-		lv_design_set_screen_panel_press_state(FALSE);
 	}
     return LV_RES_OK;
 }

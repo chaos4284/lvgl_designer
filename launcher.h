@@ -20,6 +20,7 @@ typedef struct lv_design_panel_info
 
 enum select_component{
 	SELECTED_INIT,
+	SELECTED_SCREEN,
 	SELECTED_BUTTON,
 	SELECTED_LABEL,
 	SELECTED_CHECKBOX,
