@@ -8,6 +8,8 @@
 #ifndef LAUNCHER_H_
 #define LAUNCHER_H_
 
+#define PROPERTY_COUNT	5
+
 typedef struct lv_design_panel_info
 {
  unsigned int panel_width;
@@ -18,6 +20,13 @@ typedef struct lv_design_panel_info
  lv_obj_t* ref_panel;
 }lv_design_panel_info_t;
 
+typedef struct lv_design_attribute_position
+{
+ unsigned int attr_pos_x;
+ unsigned int attr_pos_y;
+
+}lv_design_attribute_position_t;
+
 enum select_component{
 	SELECTED_INIT,
 	SELECTED_SCREEN,
@@ -26,11 +35,28 @@ enum select_component{
 	SELECTED_CHECKBOX,
 };
 
+enum select_property{
+	SELECTED_NAME,
+	SELECTED_WIDTH,
+	SELECTED_HEIGHT,
+	SELECTED_POS_X,
+	SELECTED_POS_Y,
+};
+
+enum order_location{
+	FIRST_PROPERTY,
+	SECOND_PROPERTY,
+	THIRD_PROPERTY,
+	FOURTH_PROPERTY,
+	FIFTH_PEOPERTY,
+};
+
+
 extern void lv_design_init_button_component();
 extern unsigned int lv_design_get_button_component_press_state();
 extern void lv_design_set_button_component_press_state(unsigned int button_state);
 extern lv_obj_t *lv_design_get_button_component_ref();
-
+extern lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_signal_t sign, void * param);
 
 lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void * param);
 void lv_design_launch_module();

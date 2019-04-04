@@ -254,7 +254,7 @@ void lv_test_group_1(void)
     lv_gauge_set_needle_count(obj, 1, needle_color);
     lv_gauge_set_value(obj, 0, 80);
     lv_group_add_obj(g, obj);
-    /*
+
     obj = lv_chart_create(win, NULL);
     lv_chart_series_t * ser = lv_chart_add_series(obj, LV_COLOR_RED);
     lv_chart_set_next(obj, ser, 40);
