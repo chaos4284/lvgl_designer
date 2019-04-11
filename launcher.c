@@ -44,7 +44,7 @@ lv_design_attribute_position_t* lv_design_get_attribute_position(void);
 
 unsigned int lv_design_get_current_selected_component(void);
 unsigned int current_selected_component = SELECTED_INIT;
-
+lv_obj_t * prev_obj = NULL;
 
 void lv_design_display_property_window(int attribute , lv_design_attribute_position_t *pos, char* content)
 {
@@ -247,7 +247,7 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
     lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
     if(sign == LV_SIGNAL_PRESSED)
-	{
+    {
     	if(lv_design_get_current_selected_component() == SELECTED_BUTTON)
     	{
 			lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
@@ -267,9 +267,30 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
     	}
 
     	property_input_status = TRUE;
-    	lv_group_add_obj(group_input_keyboard, obj_property);
+    	if(prev_obj == obj_property)
+    	{
+    		;
+    	}
+    	else
+    	{
+    		if(prev_obj == NULL)
+    		{
+    	   		lv_group_add_obj(group_input_keyboard, obj_property);
+    			prev_obj = obj_property;
+    		}
+    		else
+    		{
+    	   		lv_group_add_obj(group_input_keyboard, obj_property);
+    	   		lv_group_remove_obj(prev_obj);
+    			prev_obj = obj_property;
+    		}
+    	}
     	current_input_property = obj_property;
     	lv_ta_set_cursor_type(obj_property,LV_CURSOR_LINE);
+    }
+    else if(sign == LV_SIGNAL_FOCUS)
+    {
+    	printf("focus\n");
     }
 	else if(sign == LV_SIGNAL_CONTROLL)
 	{
@@ -333,7 +354,6 @@ lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_
 		    lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
 		    lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
 		    current_input_property = NULL;
-		    lv_group_remove_obj(obj_property);
 		}
 		else if((key >= 0 ) && (key <= 127))
 		{
