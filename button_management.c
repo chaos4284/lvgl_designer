@@ -23,7 +23,6 @@ static unsigned int current_btn_id = 0;
 void lv_design_init_button_component()
 {
 	component_btn_info.parent_panel = lv_design_get_component_panel();
-
 	component_btn_info.main_button_info.ref_button = lv_btn_create(component_btn_info.parent_panel->ref_panel, NULL);
 	component_btn_info.main_button_info.width = component_btn_info.parent_panel->panel_width;
 	component_btn_info.main_button_info.height = 40;
