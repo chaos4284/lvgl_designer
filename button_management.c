@@ -44,7 +44,6 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 {
 	lv_deisgn_button_info_t *temp_btn_list;
 
-
 	if(component_btn_info.user_btn_list == NULL)
 	{
 		component_btn_info.user_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
@@ -54,17 +53,18 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 	}
 	else
 	{
-
 		temp_btn_list = component_btn_info.user_btn_list;
 		while(temp_btn_list->next != NULL)
 		{
 			temp_btn_list = temp_btn_list->next;
 		}
+		
 		temp_btn_list->next = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 		memcpy(temp_btn_list->next,new_button,sizeof(lv_deisgn_button_info_t));
 		temp_btn_list->next->next = NULL;
 
 	}
+	
 	temp_btn_list = component_btn_info.user_btn_list;
 	for(int i = 0 ; i<component_btn_info.btn_count;i++ )
 	{
