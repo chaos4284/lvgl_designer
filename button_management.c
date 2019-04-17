@@ -49,10 +49,7 @@ void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button)
 	if(component_btn_info.user_btn_list == NULL)
 	{
 		component_btn_info.user_btn_list = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
-
 		memcpy(component_btn_info.user_btn_list ,new_button,sizeof(lv_deisgn_button_info_t));
-
-
 		component_btn_info.user_btn_list->next = NULL;
 
 	}
