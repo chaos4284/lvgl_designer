@@ -113,7 +113,14 @@ void lv_design_hidden_property(int component,bool hidden_flag)
 
 	}
 }
+unsigned  lv_design_get_propery_pressed_status()
+{
+	unsigned int ret = 0;
+	ret = property_input_status;
 
+	return ret;
+
+}
 void lv_design_set_current_selected_component(unsigned char selected_component)
 {
 	current_selected_component = selected_component;
@@ -122,7 +129,9 @@ void lv_design_set_current_selected_component(unsigned char selected_component)
 
 unsigned int lv_design_get_current_selected_component()
 {
-	return current_selected_component;
+	unsigned int ret = 0;
+	ret = current_selected_component;
+	return ret;
 }
 
 /* It management Draw Screen Area where components are placed*/
@@ -141,7 +150,10 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		property_input_status = FALSE;
 		if (current_input_property != NULL)
 		{
+			printf("LINE = %d\n",__LINE__);
 			lv_group_remove_obj(current_input_property);
+			lv_ta_set_cursor_type(current_input_property,LV_CURSOR_NONE);
+			prev_obj = NULL;
 			current_input_property = NULL;
 		}
 
@@ -175,7 +187,6 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 
 		if(property_input_status == TRUE)
 		{
-
 			property_input_status = FALSE;
 
 			get_component = lv_design_get_current_selected_component();
@@ -215,8 +226,13 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 				lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
 				prev_obj = NULL;
 			}
+			else
+			{
+				;
+			}
 
 		}
+
 		if(sign == LV_SIGNAL_PRESSED)
 		{
 			lv_design_hidden_property(SELECTED_INIT,TRUE);
@@ -236,53 +252,13 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 		{
 			lv_design_set_screen_panel_press_state(TRUE); /*This is a code for obtaining pressed state of the Screen Panel.*/
 		}
-	}
-/*
-	if(property_input_status == TRUE)
-	{
-		int selecte_btn_id = lv_design_get_selected_button_id();
-		get_user_btn_content = lv_design_get_button_by_id(selecte_btn_id);
-		property_input_status = FALSE;
-
-		if (current_input_property != NULL)
-		{
-			lv_group_remove_obj(current_input_property);
-			current_input_property = NULL;
-		}
-		lv_label_set_text(get_user_btn_content->ref_label,lv_ta_get_text(set_component_name));
-		lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
-		lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
-		lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
-		lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
-
-		get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
-		get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_height));
-		get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
-		get_user_btn_content->pos_y = atoi(lv_ta_get_text(set_component_position_y));
-
-		lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
-		lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
-		lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
-		lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
-		lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-	}
-*/
-/*
-	else
-	{
-		if(lv_obj_get_hidden(set_component_name) == FALSE)
-		{
-			lv_design_hidden_property(TRUE);
-			printf("hidden\n");
-		}
 		else
 		{
 			;
 		}
-
 	}
-*/
-   return res;
+
+	return res;
 }
 
 lv_res_t lv_design_property_process_callback(lv_obj_t * obj_property, lv_signal_t sign, void * param)

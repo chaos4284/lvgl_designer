@@ -199,13 +199,17 @@ lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_si
 	{
 		lv_design_draw_property_of_user_button(get_user_btn_content->ref_button);
 		lv_design_set_current_selected_component(SELECTED_BUTTON);
+		/*after selecting the screen property, when the button is clicked on screen window,
+		the property window is displayed in a pressed state.*/
 	}
 	else if(sign == LV_SIGNAL_DRAG_END)
 	{
 		get_user_btn_content->pos_x =lv_obj_get_x(get_user_btn_content->ref_button);
 		get_user_btn_content->pos_y =lv_obj_get_y(get_user_btn_content->ref_button);
+		lv_design_draw_property_of_user_button(get_user_btn_content->ref_button);
 
 		lv_obj_set_pos(get_user_btn_content->ref_button, get_user_btn_content->pos_x, get_user_btn_content->pos_y);
+		printf("user drag end\n");
 	}
 
 	return res;
