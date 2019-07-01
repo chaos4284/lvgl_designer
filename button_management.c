@@ -14,11 +14,11 @@ extern lv_design_attribute_position_t* lv_design_get_attribute_position(void);
 extern	void lv_design_set_current_selected_component(unsigned char selected_component);
 extern void lv_design_display_property_window(int attribute , lv_design_attribute_position_t *pos, char* content);
 extern void lv_design_hidden_property(int component,bool hidden_flag);
-
+extern unsigned int lv_design_get_propery_pressed_status();
 static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn);
 static lv_design_button_list_t component_btn_info;
 static unsigned int current_btn_id = 0;
-
+extern void lv_design_remove_current_selected_property_componet();
 
 void lv_design_init_button_component()
 {
@@ -192,8 +192,10 @@ lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_si
 {
 	lv_res_t res = 0;
 	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
+	unsigned int current_get_pressed_property_status;
 	current_btn_id = btn->free_num;
 	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
+	current_get_pressed_property_status = lv_design_get_propery_pressed_status();
 
 	if(sign == LV_SIGNAL_PRESSED)
 	{
@@ -201,6 +203,14 @@ lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_si
 		lv_design_set_current_selected_component(SELECTED_BUTTON);
 		/*after selecting the screen property, when the button is clicked on screen window,
 		the property window is displayed in a pressed state.*/
+		if(current_get_pressed_property_status == TRUE)
+		{
+			lv_design_remove_current_selected_property_componet();
+			lv_design_set_propery_pressed_status(FALSE);
+			printf("Remove start\n");
+		}
+
+
 	}
 	else if(sign == LV_SIGNAL_DRAG_END)
 	{

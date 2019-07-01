@@ -42,6 +42,7 @@ void lv_design_set_screen_panel_press_state(unsigned char screen_panel_press_sta
 void lv_design_set_current_selected_component(unsigned char selected_component);
 void lv_design_hidden_property(int component,bool hidden_flag);
 lv_design_attribute_position_t* lv_design_get_attribute_position(void);
+void lv_design_remove_current_selected_property_componet();
 
 unsigned int lv_design_get_current_selected_component(void);
 unsigned int current_selected_component = SELECTED_INIT;
@@ -113,13 +114,18 @@ void lv_design_hidden_property(int component,bool hidden_flag)
 
 	}
 }
-unsigned  lv_design_get_propery_pressed_status()
+unsigned int  lv_design_get_propery_pressed_status()
 {
 	unsigned int ret = 0;
 	ret = property_input_status;
 
 	return ret;
 
+}
+
+void lv_design_set_propery_pressed_status(unsigned int status)
+{
+	property_input_status = status;
 }
 void lv_design_set_current_selected_component(unsigned char selected_component)
 {
@@ -134,6 +140,14 @@ unsigned int lv_design_get_current_selected_component()
 	return ret;
 }
 
+void lv_design_remove_current_selected_property_componet()
+{
+	lv_group_remove_obj(current_input_property);
+	lv_ta_set_cursor_type(current_input_property,LV_CURSOR_NONE);
+	prev_obj = NULL;
+	current_input_property = NULL;
+
+}
 /* It management Draw Screen Area where components are placed*/
 lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void * param)
 {
