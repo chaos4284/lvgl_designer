@@ -109,14 +109,11 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 
 	}
 
-
+	if(ret_value == NULL) printf("======NuLL======\n");
 	return ret_value;
 }
 
-lv_design_button_list_t* lv_design_get_button_info()
-{
-	return  &component_btn_info;
-}
+
 
 unsigned int lv_design_get_button_component_press_state()
 {
@@ -224,4 +221,12 @@ lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_si
 
 	return res;
 }
+
+//get
+lv_design_button_list_t* lv_design_get_button_info()
+{
+	return  &component_btn_info;
+}
+
+
 

@@ -31,6 +31,7 @@ static void lv_design_draw_component();
 static void lv_design_draw_screen();
 static void lv_design_draw_property();
 static void lv_design_draw_background();
+static void lv_design_draw_ui_preview();
 
 extern void lv_design_insert_user_button(lv_deisgn_button_info_t *new_button);
 extern lv_design_button_list_t* lv_design_get_button_info();
@@ -148,6 +149,35 @@ void lv_design_remove_current_selected_property_componet()
 	current_input_property = NULL;
 
 }
+lv_res_t lv_design_pressed_preview_button_callback(lv_obj_t* preview_btn)
+{
+	lv_res_t res = 0;
+	int btn_index=  0;
+	lv_obj_t* draw_screen_view = lv_obj_create(lv_scr_act(), NULL);
+	lv_design_button_list_t *get_user_button_list;
+	lv_deisgn_button_info_t *get_user_btn_content;
+//	lv_obj_set_size(draw_screen_view, screen_panel.panel_width,screen_panel.panel_height );
+//	lv_obj_align(background_panel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+//	lv_obj_set_style(background_panel, &lv_style_pretty);
+	lv_obj_set_hidden(background_panel,TRUE);
+
+	lv_obj_set_parent(screen_container_page,draw_screen_view);
+//	get_user_button_list = lv_design_get_button_info();
+/*
+	for(btn_index = 1; btn_index <= get_user_button_list->btn_count;btn_index++)
+	{
+		get_user_btn_content = lv_design_get_button_by_id(btn_index);
+		printf("get_user_btn_content x = %d\n",get_user_btn_content->pos_x);
+		lv_obj_set_parent(get_user_btn_content->ref_button,draw_screen_view);
+		lv_obj_set_size(get_user_btn_content->ref_button, get_user_btn_content->width, get_user_btn_content->height);
+		lv_obj_align(get_user_btn_content->ref_button,NULL,LV_ALIGN_IN_TOP_LEFT,get_user_btn_content->pos_x, get_user_btn_content->pos_y);
+	}
+*/
+
+
+	return res;
+}
+
 /* It management Draw Screen Area where components are placed*/
 lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void * param)
 {
@@ -187,6 +217,7 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 
 		button_info.ref_label = lv_label_create(button_info.ref_button, NULL);
 		button_info.ref_button->free_num = get_user_btn_info->btn_count;
+		printf("button_info.ref_button->free_num = %d\n",button_info.ref_button->free_num);
 
 		lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
 		lv_obj_set_pos(button_info.ref_button, button_info.pos_x, button_info.pos_y);
@@ -428,7 +459,7 @@ static void lv_design_draw_component()
 	component_panel.panel_height = LV_HOR_RES/2;
 	component_panel.ref_panel = lv_obj_create(background_panel,NULL);
 	component_panel.pos_x = 0;
-	component_panel.pos_y = 30;
+	component_panel.pos_y = 40;
 	lv_obj_set_size(component_panel.ref_panel, component_panel.panel_width , component_panel.panel_height);
 	lv_obj_align(component_panel.ref_panel, NULL, LV_ALIGN_IN_TOP_LEFT, component_panel.pos_x, component_panel.pos_y);
 	lv_design_init_button_component();
@@ -455,7 +486,7 @@ static void lv_design_draw_screen()
 	screen_panel.panel_height = LV_HOR_RES/2;
 	screen_panel.ref_panel = lv_obj_create(screen_container_page,NULL);
 	screen_panel.pos_x = 0;
-	screen_panel.pos_y = 30;
+	screen_panel.pos_y = 40;
 
 	lv_obj_set_size(screen_container_page,screen_panel.panel_width, screen_panel.panel_height);
 	lv_obj_align(screen_container_page, NULL, LV_ALIGN_IN_TOP_MID, screen_panel.pos_x, screen_panel.pos_y);
@@ -477,7 +508,7 @@ static void lv_design_draw_property()
 	property_panel.panel_height = LV_HOR_RES/2;
 	property_panel.ref_panel = lv_obj_create(background_panel,NULL);
 	property_panel.pos_x = 0;
-	property_panel.pos_y = 30;
+	property_panel.pos_y = 40;
 	property_input_status = FALSE;
 	current_input_property = NULL;
 
@@ -593,8 +624,31 @@ static void lv_design_draw_background()
 	lv_obj_set_size(background_panel, LV_HOR_RES, LV_VER_RES);
 	lv_obj_align(background_panel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 	lv_obj_set_style(background_panel, &lv_style_pretty);
+
 }
 
+static void lv_design_draw_ui_preview()
+{
+//#define LV_HOR_RES          (800)
+//#define LV_VER_RES          (480)
+//	background_panel
+	lv_obj_t * preview_button;
+    lv_obj_t * preview_label;
+    lv_obj_get_screen(component_panel.ref_panel);
+//    printf
+//    lv_btn_set_action(component_btn_info.main_button_info.ref_button, LV_BTN_ACTION_PR, lv_design_button_componet_press_callback);
+    preview_button = lv_btn_create(background_panel, NULL);
+    lv_btn_set_action(preview_button,LV_BTN_ACTION_PR, lv_design_pressed_preview_button_callback);
+	lv_obj_set_size(preview_button, LV_HOR_RES/8 + 5, LV_VER_RES/16 + 5);
+	lv_obj_align(preview_button,NULL,LV_ALIGN_IN_TOP_LEFT,component_panel.pos_x, 2);
+	//lv_btn_set_toggle(preview_button,true);
+
+    preview_label = lv_label_create(preview_button, NULL);
+    lv_obj_align(preview_label,NULL,LV_ALIGN_CENTER,0,0);
+    lv_label_set_text(preview_label, "preview");
+
+
+}
 
 lv_design_attribute_position_t* lv_design_get_attribute_position()
 {
@@ -618,4 +672,5 @@ void lv_design_launch_module()
 	lv_design_draw_screen();
 	lv_design_draw_component();
 	lv_design_draw_property();
+	lv_design_draw_ui_preview();
 }
