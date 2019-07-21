@@ -5,6 +5,7 @@
 #include "lv_math.h"
 #include <stdlib.h>
 static lv_obj_t	*background_panel;
+static lv_obj_t* preview_screen_view;
 static lv_obj_t	*screen_container_page;
 static lv_design_panel_info_t	screen_panel;
 static lv_design_panel_info_t	property_panel;
@@ -149,20 +150,74 @@ void lv_design_remove_current_selected_property_componet()
 	current_input_property = NULL;
 
 }
+lv_res_t lv_design_pressed_preview_exit_callback(lv_obj_t* exit_btn)
+{
+	lv_deisgn_button_info_t *get_user_btn_info;
+
+	lv_obj_set_hidden(background_panel,FALSE);
+
+
+	get_user_btn_info = lv_design_get_button_info()->user_btn_list;
+
+
+	lv_obj_del(preview_screen_view);
+	lv_obj_del(exit_btn);
+	printf("press\n");
+}
+//fix me
 lv_res_t lv_design_pressed_preview_button_callback(lv_obj_t* preview_btn)
 {
 	lv_res_t res = 0;
-	int btn_index=  0;
-	lv_obj_t* draw_screen_view = lv_obj_create(lv_scr_act(), NULL);
-	lv_design_button_list_t *get_user_button_list;
+
+	lv_obj_t* preview_component_button;
+	lv_obj_t* preview_component_button_label;
+	lv_deisgn_button_info_t *get_user_btn_info;
+
 	lv_deisgn_button_info_t *get_user_btn_content;
-//	lv_obj_set_size(draw_screen_view, screen_panel.panel_width,screen_panel.panel_height );
-//	lv_obj_align(background_panel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
-//	lv_obj_set_style(background_panel, &lv_style_pretty);
+	lv_obj_t * exit_button;
+    lv_obj_t * exit_label;
+
 	lv_obj_set_hidden(background_panel,TRUE);
 
-	lv_obj_set_parent(screen_container_page,draw_screen_view);
-//	get_user_button_list = lv_design_get_button_info();
+	preview_screen_view = lv_obj_create(lv_scr_act(), NULL);
+	lv_obj_set_width(preview_screen_view,lv_obj_get_width(screen_panel.ref_panel));
+	lv_obj_set_height(preview_screen_view,lv_obj_get_height(screen_panel.ref_panel));
+	lv_obj_set_pos(preview_screen_view,0,40);
+
+	//////////////////
+	//    lv_obj_get_screen(component_panel.ref_panel);
+	//    printf
+	//    lv_btn_set_action(component_btn_info.main_button_info.ref_button, LV_BTN_ACTION_PR, lv_design_button_componet_press_callback);
+	    exit_button = lv_btn_create(lv_scr_act(), NULL);
+	    lv_btn_set_action(exit_button,LV_BTN_ACTION_PR, lv_design_pressed_preview_exit_callback);
+		lv_obj_set_size(exit_button, LV_HOR_RES/8 + 5, LV_VER_RES/16 + 5);
+		lv_obj_align(exit_button,NULL,LV_ALIGN_IN_TOP_LEFT,component_panel.pos_x+40, 2);
+		//lv_btn_set_toggle(preview_button,true);
+
+		exit_label = lv_label_create(exit_button, NULL);
+	    lv_obj_align(exit_label,NULL,LV_ALIGN_CENTER,0,0);
+	    lv_label_set_text(exit_label, "exit");
+
+	////////////////////
+
+
+
+	//lv_obj_set_parent(screen_container_page,draw_screen_view);
+	get_user_btn_info = lv_design_get_button_info()->user_btn_list;
+
+	while(get_user_btn_info != NULL)
+	{
+		printf("1111==========\n");
+		preview_component_button = lv_btn_create(preview_screen_view,get_user_btn_info->ref_button);
+		preview_component_button_label = lv_label_create(preview_component_button,get_user_btn_info->ref_label);
+		//	lv_obj_set_parent(get_user_btn_info->user_btn_list->ref_button,preview_screen_view);
+	//	lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
+	//	lv_obj_set_pos(button_info.ref_button, button_info.pos_x, button_info.pos_y);
+	//	lv_obj_set_drag(button_info.ref_button, true);
+
+
+		get_user_btn_info = get_user_btn_info->next;
+	}
 /*
 	for(btn_index = 1; btn_index <= get_user_button_list->btn_count;btn_index++)
 	{
@@ -646,7 +701,6 @@ static void lv_design_draw_ui_preview()
     preview_label = lv_label_create(preview_button, NULL);
     lv_obj_align(preview_label,NULL,LV_ALIGN_CENTER,0,0);
     lv_label_set_text(preview_label, "preview");
-
 
 }
 

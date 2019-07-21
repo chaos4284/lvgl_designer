@@ -120,9 +120,10 @@ unsigned int lv_design_get_button_component_press_state()
 	return component_btn_info.main_button_pressed;
 }
 
-void lv_design_set_button_component_press_state(unsigned int btn_press_state)
+void lv_design_set_button_component_press_state(unsigned int btn_press_state) /*component button group */
 {
 	component_btn_info.main_button_pressed = btn_press_state;
+
 }
 
 lv_obj_t* lv_design_get_button_component_ref()
