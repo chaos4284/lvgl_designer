@@ -13,18 +13,21 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
+#ifndef LV_DRV_NO_CONF
 #ifdef LV_CONF_INCLUDE_SIMPLE
 #include "lv_drv_conf.h"
 #else
 #include "../../lv_drv_conf.h"
 #endif
+#endif
 
 #if USE_MOUSE
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "lvgl/lv_hal/lv_hal_indev.h"
-
+#ifdef LV_LVGL_H_INCLUDE_SIMPLE
+#include "lvgl.h"
+#else
+#include "lvgl/lvgl.h"
+#endif
 
 #ifndef MONITOR_SDL_INCLUDE_PATH
 #define MONITOR_SDL_INCLUDE_PATH <SDL2/SDL.h>
@@ -48,12 +51,14 @@ extern "C" {
  * Initialize the mouse
  */
 void mouse_init(void);
+
 /**
  * Get the current position and state of the mouse
+ * @param indev_drv pointer to the related input device driver
  * @param data store the mouse data here
  * @return false: because the points are not buffered, so no more data to be read
  */
-bool mouse_read(lv_indev_data_t * data);
+bool mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
 
 /**
  * It will be called from the main SDL thread

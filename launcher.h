@@ -50,7 +50,9 @@ enum order_location{
 	FOURTH_PROPERTY,
 	FIFTH_PEOPERTY,
 };
-
+#define LV_GROUP_KEY_DEL            127     /*0x7F*/
+#define LV_GROUP_KEY_BACKSPACE      8       /*0x08*/
+#define LV_GROUP_KEY_ENTER          10      /*0x0A, '\n'*/
 
 extern void lv_design_init_button_component();
 extern unsigned int lv_design_get_button_component_press_state();

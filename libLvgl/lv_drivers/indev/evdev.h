@@ -13,17 +13,21 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
+#ifndef LV_DRV_NO_CONF
 #ifdef LV_CONF_INCLUDE_SIMPLE
 #include "lv_drv_conf.h"
 #else
 #include "../../lv_drv_conf.h"
 #endif
+#endif
 
 #if USE_EVDEV
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "lvgl/lv_hal/lv_hal_indev.h"
+#ifdef LV_LVGL_H_INCLUDE_SIMPLE
+#include "lvgl.h"
+#else
+#include "lvgl/lvgl.h"
+#endif
 
 /*********************
  *      DEFINES
@@ -53,7 +57,7 @@ bool evdev_set_file(char* dev_name);
  * @param data store the evdev data here
  * @return false: because the points are not buffered, so no more data to be read
  */
-bool evdev_read(lv_indev_data_t * data);
+bool evdev_read(lv_indev_drv_t * drv, lv_indev_data_t * data);
 
 
 /**********************

@@ -13,17 +13,23 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
+#ifndef LV_DRV_NO_CONF
 #ifdef LV_CONF_INCLUDE_SIMPLE
 #include "lv_drv_conf.h"
 #else
 #include "../lv_drv_conf.h"
 #endif
+#endif
 
 #if USE_WINDOWS
-#include <windows.h>
-#include <stdbool.h>
 
-#include "lvgl/lv_misc/lv_color.h"
+#ifdef LV_LVGL_H_INCLUDE_SIMPLE
+#include "lvgl.h"
+#else
+#include "lvgl/lvgl.h"
+#endif
+
+#include <windows.h>
 
 /*********************
  *      DEFINES
@@ -37,6 +43,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 extern bool lv_win_exit_flag;
+extern lv_disp_t *lv_windows_disp;
 
 HWND windrv_init(void);
 

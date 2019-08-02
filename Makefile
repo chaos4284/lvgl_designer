@@ -3,7 +3,8 @@ CC = gcc
 
 TOP_DIR = $(shell pwd)
 ROOT_DIR = $(shell pwd)/libLvgl
-LITTLEVGL_LVGL_DIR    = $(ROOT_DIR)/lvgl
+
+LITTLEVGL_LVGL_DIR    = $(ROOT_DIR)/lvgl/src
 LITTLEVGL_EXAMPLE_DIR = $(ROOT_DIR)/lv_examples
 LITTLEVGL_DRIVERS_DIR = $(ROOT_DIR)/lv_drivers
 
@@ -44,12 +45,12 @@ LV_DISPLAY_INC =  $(LITTLEVGL_DRIVERS_DIR)/display
 LV_INDEV_INC   =  $(LITTLEVGL_DRIVERS_DIR)/indev
 
 #examples
-LV_TEST_GROUP_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_group
-LV_TEST_MISC_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_misc
-LV_TEST_OBJX_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_objx
-LV_TEST_THEME_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_theme
-LV_TEST_OBJ_INC    =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_obj
-LV_TEST_STRESS_INC =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_stress
+#LV_TEST_GROUP_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_group
+#LV_TEST_MISC_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_misc
+#LV_TEST_OBJX_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_objx
+#LV_TEST_THEME_INC  =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_theme
+#LV_TEST_OBJ_INC    =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_obj
+#LV_TEST_STRESS_INC =  $(LITTLEVGL_EXAMPLE_DIR)/lv_test/lv_test_stress
 
 #LV_TUTORIAL_PORTING_INC       =  $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/0_porting
 #LV_TUTORIAL_HELLO_WORLD_INC   =  $(LITTLEVGL_EXAMPLE_DIR)/lv_tutorial/1_hello_world
@@ -78,7 +79,7 @@ LITTLEVGL_HEADER += -I$(LV_HAL_INC)
 LITTLEVGL_HEADER += -I$(LV_MISC_INC)  
 LITTLEVGL_HEADER += -I$(LV_OBJX_INC)  
 LITTLEVGL_HEADER += -I$(LV_THEMES_INC)
-
+LITTLEVGL_HEADER += -I$(ROOT_DIR)/lvgl
 #source driver add 
 LITTLEVGL_HEADER += -I$(LV_DISPLAY_INC)
 LITTLEVGL_HEADER += -I$(LV_INDEV_INC)
@@ -117,7 +118,7 @@ CFLAGS += $(LITTLEVGL_HEADER)
 #lvgl_lib
 LV_CORE_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_core/*.c)
 LV_DRAW_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_draw/*.c)
-LV_FONT_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_fonts/*.c)
+LV_FONT_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_font/*.c)
 LV_HAL_SRC    = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_hal/*.c)
 LV_MISC_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_misc/*.c)
 LV_OBJX_SRC   = $(wildcard $(LITTLEVGL_LVGL_DIR)/lv_objx/*.c)
@@ -209,8 +210,8 @@ CFLAGS += $(TIMER_HEADER)
 
 
 ########################################Main Source################################
-MAIN_SRC = main.c mouse_cursor_icon.c launcher.c button_management.c lv_test.c device_management.c
-MAIN_OBJ = main.o mouse_cursor_icon.o launcher.o button_management.o lv_test.o device_management.o
+MAIN_SRC = main.c mouse_cursor_icon.c launcher.c button_management.c device_management.c
+MAIN_OBJ = main.o mouse_cursor_icon.o launcher.o button_management.o device_management.o
 ########################################Main End################################
 
 C_OBJS          = $(C_SRCS:%.c=%.o)
@@ -225,10 +226,10 @@ all: $(MAIN_OBJ) $(OBJS)
 #	@echo "qwgwqgwqgwqg ==== $(ROOT_DIR)" 
 	$(CC) -o $(IMG_NAME) $(MAIN_OBJ) $(OBJS) $(LDFLAGS)
 test:
-	@echo "INC = $(TOPDIR)==========="
-	@echo "SRc = $(LV_APPS_DEMO_SRC)===="
-	@echo "test = $(LV_TUTORIAL_PORTING_SRC)=========="
-	@echo "timer = $(XCP_TIMER)=============="
+#	@echo "INC = $(TOPDIR)==========="
+#	@echo "SRc = $(LV_APPS_DEMO_SRC)===="
+#	@echo "test = $(LV_TUTORIAL_PORTING_SRC)=========="
+	@echo "timer = $(TIMER_HEADER)=============="
 clean:
 	rm -f $(OBJS) $(MAIN_OBJ) $(IMG_NAME)
 ifeq (_depend,$(wildcard _depend))

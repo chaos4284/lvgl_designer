@@ -13,16 +13,21 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
+#ifndef LV_DRV_NO_CONF
 #ifdef LV_CONF_INCLUDE_SIMPLE
 #include "lv_drv_conf.h"
 #else
 #include "../../lv_drv_conf.h"
 #endif
+#endif
 
 #if USE_SSD1963
 
-#include <stdint.h>
-#include "lvgl/lv_misc/lv_color.h"
+#ifdef LV_LVGL_H_INCLUDE_SIMPLE
+#include "lvgl.h"
+#else
+#include "lvgl/lvgl.h"
+#endif
 
 /*********************
  *      DEFINES
@@ -130,9 +135,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 void ssd1963_init(void);
-void ssd1963_flush(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const lv_color_t * color_p);
-void ssd1963_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, lv_color_t  color);
-void ssd1963_map(int32_t x1, int32_t y1, int32_t x2, int32_t y2, const lv_color_t * color_p);
+void ssd1963_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p);
 
 /**********************
  *      MACROS

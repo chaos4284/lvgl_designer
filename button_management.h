@@ -15,6 +15,7 @@ typedef struct lv_deisgn_button_info
 	unsigned int pos_y;
 	unsigned int width;
 	unsigned int height;
+	unsigned int id;
 	lv_obj_t	*ref_button;
 	lv_obj_t 	*ref_label;
 	struct lv_deisgn_button_info *next;

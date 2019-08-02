@@ -6,13 +6,13 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#include "timer.h"
+//#include "timer.h"
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/monitor.h"
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/keyboard.h"
 #include "lv_conf.h"
-#include "lvgl/lv_draw/lv_draw_img.h"
+#include "lvgl/src/lv_draw/lv_draw_img.h"
 #include <SDL2/SDL.h>
 #define SYS_TICK 10000
 /*********************

@@ -15,7 +15,7 @@ extern	void lv_design_set_current_selected_component(unsigned char selected_comp
 extern void lv_design_display_property_window(int attribute , lv_design_attribute_position_t *pos, char* content);
 extern void lv_design_hidden_property(int component,bool hidden_flag);
 extern unsigned int lv_design_get_propery_pressed_status();
-static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn);
+static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn, lv_event_t event);
 static lv_design_button_list_t component_btn_info;
 static unsigned int current_btn_id = 0;
 extern void lv_design_remove_current_selected_property_componet();
@@ -34,7 +34,7 @@ void lv_design_init_button_component()
 	lv_obj_set_size(component_btn_info.main_button_info.ref_button, component_btn_info.main_button_info.width, component_btn_info.main_button_info.height);
 	lv_obj_align(component_btn_info.main_button_info.ref_button,NULL,LV_ALIGN_IN_TOP_LEFT,component_btn_info.main_button_info.pos_x ,component_btn_info.main_button_info.pos_y);
 	lv_btn_set_toggle(component_btn_info.main_button_info.ref_button,true);
-	lv_btn_set_action(component_btn_info.main_button_info.ref_button, LV_BTN_ACTION_PR, lv_design_button_componet_press_callback);
+	lv_obj_set_event_cb(component_btn_info.main_button_info.ref_button, lv_design_button_componet_press_callback);
 	component_btn_info.main_button_info.ref_label = lv_label_create(component_btn_info.main_button_info.ref_button, NULL);
 	lv_obj_align(component_btn_info.main_button_info.ref_label,NULL,LV_ALIGN_CENTER,0,0);
 	lv_label_set_text(component_btn_info.main_button_info.ref_label, "Button");
@@ -81,7 +81,7 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 
 	if(temp_btn_list->next == NULL)
 	{
-		if(temp_btn_list->ref_button->free_num == btn_id)
+		if(temp_btn_list->id == btn_id)
 		{
 			ret_value = temp_btn_list;
 		}
@@ -95,7 +95,7 @@ lv_deisgn_button_info_t *lv_design_get_button_by_id(unsigned int btn_id)
 	{
 		while(temp_btn_list != NULL)
 		{
-			if(temp_btn_list->ref_button->free_num == btn_id)
+			if(temp_btn_list->id == btn_id)
 			{
 				ret_value = temp_btn_list;
 				break;
@@ -131,7 +131,7 @@ lv_obj_t* lv_design_get_button_component_ref()
 	return component_btn_info.main_button_info.ref_button;
 }
 
-static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn)
+static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn, lv_event_t event)
 {
 
 	if(component_btn_info.main_button_pressed  == FALSE)
@@ -157,7 +157,7 @@ lv_res_t lv_design_draw_property_of_user_button(lv_obj_t* btn)
 	lv_design_attribute_position_t *btn_attr_pos;
 	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 
-	current_btn_id = btn->free_num;
+	current_btn_id = *(unsigned int*)btn->user_data;
 	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 
 	if(get_user_btn_content == NULL)
@@ -191,7 +191,7 @@ lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_si
 	lv_res_t res = 0;
 	lv_deisgn_button_info_t *get_user_btn_content;// = (lv_deisgn_button_info_t*)malloc(sizeof(lv_deisgn_button_info_t));
 	unsigned int current_get_pressed_property_status;
-	current_btn_id = btn->free_num;
+	current_btn_id = *(unsigned int*)btn->user_data;
 	get_user_btn_content = lv_design_get_button_by_id(current_btn_id);
 	current_get_pressed_property_status = lv_design_get_propery_pressed_status();
 
