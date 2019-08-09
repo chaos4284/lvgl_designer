@@ -134,13 +134,17 @@ lv_obj_t* lv_design_get_button_component_ref()
 static lv_res_t lv_design_button_componet_press_callback(lv_obj_t* btn, lv_event_t event)
 {
 
-	if(component_btn_info.main_button_pressed  == FALSE)
+	if(event == LV_EVENT_VALUE_CHANGED)
 	{
-		component_btn_info.main_button_pressed = TRUE;
-	}
-	else
-	{
-		component_btn_info.main_button_pressed = FALSE;
+
+		if(component_btn_info.main_button_pressed  == FALSE)
+		{
+			component_btn_info.main_button_pressed = TRUE;
+		}
+		else
+		{
+			component_btn_info.main_button_pressed = FALSE;
+		}
 	}
     return LV_RES_OK;
 }

@@ -4,6 +4,8 @@
 #include "lvgl/lvgl.h"
 #include "lv_math.h"
 #include <stdlib.h>
+#define LVGL_DEBUG printf("LINE = %d, FUNCTION NAME = %s\n",__LINE__,__FUNCTION__);
+
 static lv_obj_t	*background_panel;
 static lv_obj_t* preview_screen_view;
 static lv_obj_t	*screen_container_page;
@@ -227,120 +229,137 @@ lv_res_t lv_design_screen_press_callback(lv_obj_t * btn, lv_signal_t sign, void 
 	lv_design_button_list_t *get_user_btn_info;
 	char data[100] = {0,};
     unsigned int get_component = 0;
-	if(lv_design_get_button_component_press_state() == TRUE)
-	{
-		property_input_status = FALSE;
-		if (current_input_property != NULL)
+
+    if(sign == LV_SIGNAL_PRESSED)
+    {
+		if(lv_design_get_button_component_press_state() == TRUE)
 		{
-			printf("LINE = %d\n",__LINE__);
-			lv_group_remove_obj(current_input_property);
-			lv_ta_set_cursor_type(current_input_property,LV_CURSOR_NONE);
-			prev_obj = NULL;
-			current_input_property = NULL;
-		}
+			LVGL_DEBUG
 
-		get_user_btn_info = lv_design_get_button_info();
-		get_user_btn_info->btn_count++;
-		lv_design_set_button_component_press_state(FALSE);
-
-		lv_btn_set_state(lv_design_get_button_component_ref(),LV_BTN_STATE_REL);
-		indev = lv_indev_get_act();
-		lv_indev_get_point(indev, &pos);
-
-		button_info.width = 100;
-		button_info.height = 50;
-		button_info.pos_x = pos.x - btn->coords.x1 ;
-		button_info.pos_y = pos.y - btn->coords.y1 ;
-		button_info.ref_button = lv_btn_create(screen_panel.ref_panel, NULL);
-
-		button_info.ref_label = lv_label_create(button_info.ref_button, NULL);
-		button_info.id = get_user_btn_info->btn_count;
-		*(unsigned int *)button_info.ref_button->user_data =get_user_btn_info->btn_count;
-//		printf("button_info.ref_button->free_num = %u\n",(unsigned int)button_info.ref_button->user_data);
-
-		lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
-		lv_obj_set_pos(button_info.ref_button, button_info.pos_x, button_info.pos_y);
-		lv_obj_set_drag(button_info.ref_button, true);
-
-		lv_design_insert_user_button(&button_info);
-		lv_obj_set_signal_cb(button_info.ref_button, lv_design_manage_position_of_user_button_callback);
-		lv_label_set_text(button_info.ref_label, "Button");
-	}
-	else
-	{
-
-		if(property_input_status == TRUE)
-		{
 			property_input_status = FALSE;
-
-			get_component = lv_design_get_current_selected_component();
 			if (current_input_property != NULL)
 			{
+
+				printf("LINE = %d\n",__LINE__);
 				lv_group_remove_obj(current_input_property);
-				printf("remove status\n");
 				lv_ta_set_cursor_type(current_input_property,LV_CURSOR_NONE);
 				prev_obj = NULL;
 				current_input_property = NULL;
 			}
 
-			if(get_component == SELECTED_SCREEN)
+			get_user_btn_info = lv_design_get_button_info();
+			get_user_btn_info->btn_count++;
+			lv_design_set_button_component_press_state(FALSE);
+
+			lv_btn_set_state(lv_design_get_button_component_ref(),LV_BTN_STATE_REL);
+			indev = lv_indev_get_act();
+			lv_indev_get_point(indev, &pos);
+
+			button_info.width = 100;
+			button_info.height = 50;
+			button_info.pos_x = pos.x - btn->coords.x1 ;
+			button_info.pos_y = pos.y - btn->coords.y1 ;
+			button_info.ref_button = lv_btn_create(screen_panel.ref_panel, NULL);
+
+			button_info.ref_label = lv_label_create(button_info.ref_button, NULL);
+			button_info.id = get_user_btn_info->btn_count;
+			LVGL_DEBUG
+			printf("get_user_btn_info->btn_count= %d\n",get_user_btn_info->btn_count);
+//			*(unsigned int *)(button_info.ref_button->user_data) =get_user_btn_info->btn_count;
+
+//			printf("button_info.ref_button->free_num = %u\n",(unsigned int)button_info.ref_button->user_data);
+
+			lv_obj_set_size(button_info.ref_button, button_info.width, button_info.height);
+			lv_obj_set_pos(button_info.ref_button, button_info.pos_x, button_info.pos_y);
+			lv_obj_set_drag(button_info.ref_button, true);
+
+			lv_design_insert_user_button(&button_info);
+
+			lv_obj_set_signal_cb(button_info.ref_button, lv_design_manage_position_of_user_button_callback);
+
+
+			lv_label_set_text(button_info.ref_label, "Button");
+
+
+
+		}
+		else
+		{
+
+			if(property_input_status == TRUE)
 			{
+				property_input_status = FALSE;
+
+				get_component = lv_design_get_current_selected_component();
+				if (current_input_property != NULL)
+				{
+					lv_group_remove_obj(current_input_property);
+					printf("remove status\n");
+					lv_ta_set_cursor_type(current_input_property,LV_CURSOR_NONE);
+					prev_obj = NULL;
+					current_input_property = NULL;
+				}
+
+				if(get_component == SELECTED_SCREEN)
+				{
+
+				}
+				else if(get_component == SELECTED_BUTTON)
+				{
+					int selecte_btn_id = lv_design_get_selected_button_id();
+					get_user_btn_content = lv_design_get_button_by_id(selecte_btn_id);
+
+					lv_label_set_text(get_user_btn_content->ref_label,lv_ta_get_text(set_component_name));
+					lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
+					lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
+					lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
+					lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
+
+					get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
+					get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_height));
+					get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
+					get_user_btn_content->pos_y = atoi(lv_ta_get_text(set_component_position_y));
+
+					lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
+					lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
+					lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
+					lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
+					lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
+					prev_obj = NULL;
+				}
+				else
+				{
+					;
+				}
 
 			}
-			else if(get_component == SELECTED_BUTTON)
+
+			if(sign == LV_SIGNAL_PRESSED)
 			{
-				int selecte_btn_id = lv_design_get_selected_button_id();
-				get_user_btn_content = lv_design_get_button_by_id(selecte_btn_id);
+				lv_design_hidden_property(SELECTED_INIT,TRUE);
+				lv_design_hidden_property(SELECTED_SCREEN,FALSE);
+				sprintf(data,"%d",screen_panel.panel_width);
+				lv_design_display_property_window(SELECTED_WIDTH,&area_position[0],data);
+				sprintf(data,"%d",screen_panel.panel_height);
+				lv_design_display_property_window(SELECTED_HEIGHT,&area_position[1],data);
 
-				lv_label_set_text(get_user_btn_content->ref_label,lv_ta_get_text(set_component_name));
-				lv_obj_set_width(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_width)));
-				lv_obj_set_height(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_size_height)));
-				lv_obj_set_x(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_x)));
-				lv_obj_set_y(get_user_btn_content->ref_button, atoi(lv_ta_get_text(set_component_position_y)));
-
-				get_user_btn_content->width = atoi(lv_ta_get_text(set_component_size_width));
-				get_user_btn_content->height = atoi(lv_ta_get_text(set_component_size_height));
-				get_user_btn_content->pos_x = atoi(lv_ta_get_text(set_component_position_x));
-				get_user_btn_content->pos_y = atoi(lv_ta_get_text(set_component_position_y));
-
-				lv_ta_set_cursor_type(set_component_name,LV_CURSOR_NONE);
-				lv_ta_set_cursor_type(set_component_size_width,LV_CURSOR_NONE);
-				lv_ta_set_cursor_type(set_component_size_height,LV_CURSOR_NONE);
-				lv_ta_set_cursor_type(set_component_position_x,LV_CURSOR_NONE);
-				lv_ta_set_cursor_type(set_component_position_y,LV_CURSOR_NONE);
-				prev_obj = NULL;
+				lv_design_set_current_selected_component(SELECTED_SCREEN);
+			}
+			else if(sign == LV_SIGNAL_PRESSING)
+			{
+				lv_design_set_screen_panel_press_state(FALSE); /*This is a code for movement of Screnn Panel.*/
+			}
+			else if(sign == LV_SIGNAL_PRESS_LOST)
+			{
+				lv_design_set_screen_panel_press_state(TRUE); /*This is a code for obtaining pressed state of the Screen Panel.*/
 			}
 			else
 			{
 				;
 			}
+		}
+    }
 
-		}
-
-		if(sign == LV_SIGNAL_PRESSED)
-		{
-			lv_design_hidden_property(SELECTED_INIT,TRUE);
-			lv_design_hidden_property(SELECTED_SCREEN,FALSE);
-			sprintf(data,"%d",screen_panel.panel_width);
-			lv_design_display_property_window(SELECTED_WIDTH,&area_position[0],data);
-			sprintf(data,"%d",screen_panel.panel_height);
-			lv_design_display_property_window(SELECTED_HEIGHT,&area_position[1],data);
-
-			lv_design_set_current_selected_component(SELECTED_SCREEN);
-		}
-		else if(sign == LV_SIGNAL_PRESSING)
-		{
-			lv_design_set_screen_panel_press_state(FALSE); /*This is a code for movement of Screnn Panel.*/
-		}
-		else if(sign == LV_SIGNAL_PRESS_LOST)
-		{
-			lv_design_set_screen_panel_press_state(TRUE); /*This is a code for obtaining pressed state of the Screen Panel.*/
-		}
-		else
-		{
-			;
-		}
-	}
 
 	return res;
 }
