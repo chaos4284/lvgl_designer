@@ -190,6 +190,49 @@ lv_res_t lv_design_draw_property_of_user_button(lv_obj_t* btn)
 	return res;
 }
 
+lv_deisgn_button_info_t *get_object(lv_obj_t *btn)
+{
+	lv_deisgn_button_info_t *ret_value = NULL;
+	lv_deisgn_button_info_t *temp_btn_list = NULL;
+	temp_btn_list = component_btn_info.user_btn_list;
+
+	if(temp_btn_list->next == NULL)
+	{
+		if(temp_btn_list->ref_button == btn)
+		{
+			ret_value = temp_btn_list;
+
+		}
+		else
+		{
+			ret_value = NULL;
+
+		}
+
+	}
+	else
+	{
+		while(temp_btn_list != NULL)
+		{
+			if(temp_btn_list->ref_button == btn)
+			{
+				ret_value = temp_btn_list;
+				LVGL_DEBUG
+				break;
+			}
+			else
+			{
+				temp_btn_list = temp_btn_list->next;
+			}
+			ret_value = NULL;
+		}
+
+	}
+
+	if(ret_value == NULL) printf("======NuLL======\n");
+	return ret_value;
+}
+
 lv_res_t lv_design_manage_position_of_user_button_callback(lv_obj_t * btn, lv_signal_t sign, void * param)
 {
 	lv_res_t res = 0;
